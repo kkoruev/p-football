@@ -1,0 +1,29 @@
+.invitations-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    min-width: 100vw;
+}
+
+.header-text {
+    text-align: center; /* Center the text only for the header */
+    /*background-color: #333; !* Add a background color to the header *!*/
+    /*color: #fff; !* Set font color to white *!*/
+    padding: 8px; /* Add padding for spacing */
+    border-radius: 4px; /* Add border-radius for rounded corners */
+}
+
+.invitation-card-container {
+    width: 100%;
+    margin-bottom: 16px;
+    border-radius: 8px; /* Add border-radius for rounded corners */
+    padding-bottom: 16px; /* Add padding for spacing inside the container */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.invitation-card + .invitation-card {
+    margin-top: 25px; /* Add margin between adjacent cards */
+}

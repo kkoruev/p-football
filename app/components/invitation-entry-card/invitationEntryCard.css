@@ -1,0 +1,32 @@
+.invitation-card {
+    margin-bottom: 16px;
+    max-width: 400px; /* Set a maximum width to control the card size */
+    width: 100%; /* Ensure the card takes full width up to the maximum */
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    border: 1px solid #ddd; /* Adds a subtle border for visual separation */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow for depth */
+}
+
+.card-header {
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 8px;
+    text-align: center; /* Center the text in the header */
+    border-bottom: 2px solid #ddd; /* Adds a bottom border to separate header and content */
+    background-color: #f0f0f0; /* Light gray color */
+}
+
+.card-content {
+    flex: 1; /* This allows the content to take up available space */
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px; /* Adds some spacing between content items */
+}
+
+.card-actions {
+    justify-content: space-between;
+    padding: 16px;
+    gap: 4px;
+}
