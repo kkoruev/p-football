@@ -11,8 +11,9 @@ import {
 import {Check, EventAvailable, ThumbDown, ThumbUp} from "@mui/icons-material";
 
 import styles from './invitationEntryCard.css';
+import '~/styles/global.css'
 import {Invitation} from '~/data/invitation'
-import {Form, useNavigation} from "@remix-run/react";
+import {Form, Link, useNavigation} from "@remix-run/react";
 
 
 export default function InvitationEntryCard({invitation, actionResult}: {
@@ -27,15 +28,17 @@ export default function InvitationEntryCard({invitation, actionResult}: {
    return (
       <>
          <Card className="invitation-card" variant="outlined">
-            <CardActionArea>
-               <CardHeader title={invitation.eventName} subheader={invitation.location} className="card-header">
-               </CardHeader>
-               <CardContent className="card-content">
-                  <Typography variant="body2">Max Players: {invitation.maxPlayers}</Typography>
-                  <Typography variant="body2">Current Players: {invitation.currentPlayers}</Typography>
-                  <Typography variant="body2">Date and Time: {invitation.dateTime}</Typography>
-               </CardContent>
-            </CardActionArea>
+            <Link to={`/invitations/${invitation.id}`} reloadDocument className='link-inherit'>
+               <CardActionArea>
+                  <CardHeader title={invitation.eventName} subheader={invitation.location} className="card-header">
+                  </CardHeader>
+                  <CardContent className="card-content">
+                     <Typography variant="body2">Max Players: {invitation.maxPlayers}</Typography>
+                     <Typography variant="body2">Current Players: {invitation.currentPlayers}</Typography>
+                     <Typography variant="body2">Date and Time: {invitation.dateTime}</Typography>
+                  </CardContent>
+               </CardActionArea>
+            </Link>
             <CardActions className="card-actions">
                {actionResult ? (
                   <Alert sx={{ width: '100%' }} icon={<Check fontSize="inherit" />}  severity="success" action={
