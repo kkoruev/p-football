@@ -5,6 +5,7 @@ export interface ExpandedInvitation {
    location: string;
    date: string; // ISO 8601 format recommended: YYYY-MM-DD
    time: string; // Time in 24-hour format: HH:MM
+   duration: number // duration in minutes
    hostName: string;
    currentNumberOfPlayers: number;
    maybePlayers: number;

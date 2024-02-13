@@ -8,7 +8,7 @@ import {
    CardActions,
    CardContent,
    CardMedia,
-   Container,
+   Container, Divider,
    Grid,
    List,
    ListItem,
@@ -28,13 +28,28 @@ export async function loader({params}) {
       location: 'City Park',
       date: '15-02-2024',
       time: '20:30',
+      duration: 60,
       hostName: 'Stoyan Stoyanov',
       currentNumberOfPlayers: 5,
       maybePlayers: 2,
       maximumNumberOfPlayers: 12,
-      description: "Have fun",
+      description: "Цените са по 120 лв на час заради отоплението ‼️‼️‼️\n" +
+         "Носете кеш (или Револют) - 10 лв на човек\n" +
+         "Бъдете навреме, за да започнем навреме.\n" +
+         "В описанието и таговете може да намерите адреса на мястото, но за по-сигурно, ще го оставя и тук:\n" +
+         "ул. Хан Омуртаг 42",
       eventStatus: 'Upcoming',
-      participants: [{name: 'Kris Koruev', status: 'None'}],
+      participants: [
+         {name: 'Kris K', status: 'None'},
+         {name: 'Kris P', status: 'Accepted'},
+         {name: 'Stoyan S', status: 'Rejected'},
+         {name: 'Dimitar P', status: 'Accepted'},
+         {name: 'Marto P', status: 'None'},
+         {name: 'Marto St', status: 'None'},
+         {name: 'Marto Cho', status: 'None'},
+         {name: 'Krasi G', status: 'None'},
+         {name: 'Andrey I', status: 'None'},
+      ],
       currentUserStatus: 'None'
    };
    return invitation;
@@ -45,63 +60,11 @@ export default function Invitation() {
    const invitation: ExpandedInvitation = useLoaderData<typeof  loader>();
 
    const imageUrl = 'https://images.expertreviews.co.uk/wp-content/uploads/2023/09/best-football-lead-scaled.jpg?width=626&height=352&fit=crop&format=webply';
-   // Use the invitationId to fetch data or for other logic
-   // return (
-   //    <Box sx={{ flexGrow: 1, m: 2 }}>
-   //       <Grid container spacing={3}>
-   //          {/* Event Details Section */}
-   //          <Grid item xs={12}>
-   //             <Card raised>
-   //                <CardContent>
-   //                   <Typography variant="h5" component="div">
-   //                      {invitation.eventName}
-   //                   </Typography>
-   //                   <Typography sx={{ mb: 1.5 }} color="text.secondary">
-   //                      {`${invitation.date} at ${invitation.time}`}
-   //                   </Typography>
-   //                   <Typography variant="body2">
-   //                      Location: {invitation.location} <MapOutlined sx={{ fontSize: "small" }} />
-   //                   </Typography>
-   //                   <Typography variant="body2">
-   //                      Hosted by: {invitation.hostName}
-   //                   </Typography>
-   //                </CardContent>
-   //             </Card>
-   //          </Grid>
-   //
-   //          {/* Participation Details */}
-   //          <Grid item xs={12}>
-   //             <Card raised>
-   //                <CardContent>
-   //                   <Typography variant="body1">{invitation.description}</Typography>
-   //                   <Typography sx={{ mt: 1.5 }} variant="body2">
-   //                      {`${invitation.currentNumberOfPlayers}/${invitation.maximumNumberOfPlayers} Players have joined, ${invitation.maybePlayers} Maybe`}
-   //                   </Typography>
-   //                </CardContent>
-   //             </Card>
-   //          </Grid>
-   //
-   //          {/* User Action Section - Conditional rendering based on currentUserStatus */}
-   //          <Grid item xs={12}>
-   //             <CardActions>
-   //                {invitation.currentUserStatus === 'None' && (
-   //                   <>
-   //                      <Button variant="contained" color="success">Accept</Button>
-   //                      <Button variant="outlined">Maybe</Button>
-   //                      <Button variant="outlined" color="error">Reject</Button>
-   //                   </>
-   //                )}
-   //                {/* Implement logic to show current status and potentially an "Undo" action */}
-   //             </CardActions>
-   //          </Grid>
-   //       </Grid>
-   //    </Box>
-   // );
 
    return (
       <Container maxWidth="lg">
          <Box sx={{ display: 'flex', justifyContent: 'center', p: 2, bgcolor: 'background.default' }}>
-            <Grid container spacing={2} direction="column" alignItems="center">
+            <Grid container spacing={3} alignItems="center">
 
                {/* Card 1: Event Information */}
                <Grid item xs={12}>
@@ -114,8 +77,7 @@ export default function Invitation() {
                      />
                      <Box sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
                         <Typography variant="h5">{invitation.eventName}</Typography>
-                        <Typography>{`Location: ${invitation.location}`}</Typography>
-                        <Typography>{`Host: ${invitation.hostName}`}</Typography>
+
                         {/* Action Buttons */}
                         <Box>
                            <Button variant="outlined">Accept</Button>
@@ -129,19 +91,46 @@ export default function Invitation() {
                {/* Card 2: Event Description and Details */}
                <Grid item xs={12} md={6}>
                   <Card sx={{ p: 2 }}>
-                     <Typography variant="body1">{invitation.description}</Typography>
+                     <Box sx={{ mb: 2 }}>
+                        <Typography variant="h6" gutterBottom>Details</Typography>
+                        <Typography variant="body2" gutterBottom>{`Host: ${invitation.hostName}`}</Typography>
+                        <Typography variant="body2" gutterBottom>{`Location: ${invitation.location}`}</Typography>
+                        <Typography variant="body2" gutterBottom>Duration: {invitation.duration} min</Typography>
+                        <Typography variant="body2" gutterBottom>Status: {invitation.eventStatus}</Typography>
+                        <Divider sx={{ my: 2 }} />
+                     </Box>
+                     <Typography variant="body2">{invitation.description}</Typography>
                      {/* Event details */}
                   </Card>
                </Grid>
 
                {/* Card 3: Participants List */}
                <Grid item xs={12} md={6}>
-                  <Card sx={{ maxHeight: 300, overflow: 'auto' }}>
-                     <List>
-                        {invitation.participants.map((participant, index) => (
-                           <ListItem key={index}>{`${participant.name} (${participant.status})`}</ListItem>
-                        ))}
-                     </List>
+                  <Card sx={{ p: 2, maxHeight: 300, overflow: 'auto' }}>
+                     <CardContent sx={{flex: '1 0 auto'}}>
+                        <Typography variant="h6" gutterBottom>Guest list</Typography>
+                        <Box sx={{ mb: 2 }}>
+                           <Grid container spacing={2}>
+                              <Grid item xs={4}>
+                                 <Typography variant="body2">Invited Players: {invitation.maximumNumberOfPlayers}</Typography>
+                              </Grid>
+                              <Grid item xs={4}>
+                                 <Typography variant="body2">Accepted: {invitation.currentNumberOfPlayers}</Typography>
+                              </Grid>
+                              <Grid item xs={4}>
+                                 <Typography variant="body2">Maybe: {invitation.maybePlayers}</Typography>
+                              </Grid>
+                           </Grid>
+                           <Divider sx={{ my: 2 }} />
+                        </Box>
+                     </CardContent>
+                     <Box sx={{ flex: '1 1 auto', maxHeight: '300px', overflowY: 'auto' }}>
+                        <List>
+                           {invitation.participants.map((participant, index) => (
+                              <ListItem key={index}>{`${participant.name} (${participant.status})`}</ListItem>
+                           ))}
+                        </List>
+                     </Box>
                   </Card>
                </Grid>
 
