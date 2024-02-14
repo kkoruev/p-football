@@ -20,7 +20,7 @@ export async function loader({params}) {
    await delay(1000);
 
    const invitation: ExpandedInvitation = {
-      eventName: 'Football Game 1',
+      eventName: 'Футбол Вторник ||',
       location: 'City Park',
       date: '15-02-2024',
       time: '20:30',
