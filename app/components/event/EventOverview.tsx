@@ -1,40 +1,49 @@
-import {Box, Button, Card, CardMedia, Chip, Grid, Typography} from "@mui/material";
+import {Box, Button, Card, CardMedia, Typography} from "@mui/material";
 import {ExpandedInvitation} from "~/data/expanded.invitation";
 import {
-   AccessTime, AccessTimeFilledRounded,
-   CalendarToday,
-   CalendarTodayOutlined,
-   CalendarTodayRounded, CalendarTodaySharp,
-   CalendarTodayTwoTone
+   AccessTimeFilledRounded,
+   CalendarTodayRounded,
 } from "@mui/icons-material";
 
-export default function EventOverview({invitation, imageUrl} : {
+export default function EventOverview({invitation, imageUrl}: {
    invitation: ExpandedInvitation,
    imageUrl: string
 }) {
+
    return (
-      <Grid item xs={12} sx={{ display: 'flex'}}>
-         <Card sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, maxWidth: { sm: '75%'}, width: '100%' }}>
-            <CardMedia
-               component="img"
-               sx={{ width: { xs: '100%', sm: '30%'}, height: { xs: 200, sm: 'auto' } }}
-               image={imageUrl}
-               alt="Event Image"
-            />
-            <Box sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1, m: 2 , justifyContent: 'space-between'}}>
-               <Typography variant="h5" sx={{mb: 2}}>{invitation.eventName}</Typography>
-               <Box sx={{ display: 'flex', gap: 3, flexWrap: 'wrap', alignItems: 'center', mb: 2 }}>
-                  <Chip icon={<CalendarTodayRounded />} label={`Date: ${invitation.date}`} color="primary" variant="outlined" />
-                  <Chip icon={<AccessTimeFilledRounded />} label={`Time: ${invitation.time}`} color="primary" variant="outlined" />
-               </Box>
-               {/* Action Buttons */}
-               <Box sx={{ mt: 'auto', display: 'flex', gap: 4 }}>
-                  <Button variant="contained">Accept</Button>
-                  <Button variant="contained" color="secondary">Maybe</Button>
-                  <Button variant="outlined" color="error">Reject</Button>
-               </Box>
+      <Card sx={{position: 'relative', width: '100%', maxWidth: '100%'}}>
+         <CardMedia
+            component="img"
+            image={imageUrl}
+            alt="Event Image"
+            sx={{height: {xs: 200, sm: 300}, objectFit: 'cover'}}
+         />
+         <Box sx={{
+            position: 'absolute',
+            bottom: 0,
+            left: 0,
+            width: '100%',
+            backgroundColor: 'rgba(0, 0, 0, 0.2)', // semi-transparent overlay for better text visibility
+            color: 'white',
+            padding: '20px',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+            gap: 2
+         }}>
+            <Typography variant="h4">{invitation.eventName}</Typography>
+            <Box sx={{display: 'flex', gap: 1, alignItems: 'center'}}>
+               <CalendarTodayRounded/>
+               <Typography variant="body1">{`${invitation.date}`}</Typography>
+               <AccessTimeFilledRounded/>
+               <Typography variant="body1">{`${invitation.time}`}</Typography>
             </Box>
-         </Card>
-      </Grid>
+            <Box sx={{display: 'flex', gap: 2}}>
+               <Button variant="contained" color="primary">Accept</Button>
+               <Button variant="contained" color="secondary">Maybe</Button>
+               <Button variant="contained" color="error">Reject</Button>
+            </Box>
+         </Box>
+      </Card>
    )
 }

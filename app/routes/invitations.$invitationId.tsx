@@ -14,7 +14,7 @@ import GuestListExpanded from "~/components/event/GuestListExpanded";
 
 
 export async function loader({params}) {
-   const { invitationId } = params;
+   const {invitationId} = params;
    // this should be call to db to get the Invitation
    // adding delay for the call
    await delay(1000);
@@ -57,9 +57,10 @@ export async function loader({params}) {
 
 
 export default function Invitation() {
-   const invitation: ExpandedInvitation = useLoaderData<typeof  loader>();
+   const invitation: ExpandedInvitation = useLoaderData<typeof loader>();
 
    const imageUrl = 'https://images.expertreviews.co.uk/wp-content/uploads/2023/09/best-football-lead-scaled.jpg?width=626&height=352&fit=crop&format=webply';
+   const imageUrl2 = 'https://shorturl.at/kmtvG';
 
    const [modalOpen, setModalOpen] = useState(false);
    const handleOpenModal = () => setModalOpen(true);
@@ -67,20 +68,25 @@ export default function Invitation() {
 
    return (
       <Container maxWidth="lg">
-         <Box sx={{ display: 'flex', justifyContent: 'center', p: 2, bgcolor: 'background.default' }}>
+         <Box sx={{display: 'flex', justifyContent: 'center', p: 2, bgcolor: 'background.default'}}>
             <Grid container spacing={3} alignItems="center">
 
                {/* Card 1: Event Information */}
-               <EventOverview invitation={invitation} imageUrl={imageUrl}></EventOverview>
+               <Grid item xs={12} sx={{display: 'flex'}}>
+                  <EventOverview invitation={invitation} imageUrl={imageUrl2}/>
+               </Grid>
 
                {/* Card 2: Event Description and Details */}
-               <EventDescription invitation={invitation}></EventDescription>
-
+               <Grid item xs={12} md={6}>
+                  <EventDescription invitation={invitation}/>
+               </Grid>
                {/* Card 3: Participants List */}
-               <GuestList invitation={invitation} handleOpenModal={handleOpenModal}></GuestList>
+               <Grid item xs={12} md={6}>
+                  <GuestList invitation={invitation} handleOpenModal={handleOpenModal}/>
+               </Grid>
+
             </Grid>
-            <GuestListExpanded invitation={invitation} modalOpen={modalOpen} handleCloseModal={handleCloseModal}>
-            </GuestListExpanded>
+            <GuestListExpanded invitation={invitation} modalOpen={modalOpen} handleCloseModal={handleCloseModal}/>
          </Box>
       </Container>
 
