@@ -29,7 +29,8 @@ export async function loader({params}) {
       currentNumberOfPlayers: 5,
       maybePlayers: 2,
       maximumNumberOfPlayers: 12,
-      description: "Цените са по 120 лв на час заради отоплението ‼️‼️‼️\n" +
+      description: "ИГРАЕМ ОТ 20:30 на Winbet Sport & Event Centre!!! \n\n" +
+         "Цените са по 120 лв на час заради отоплението ‼️‼️‼️\n" +
          "Носете кеш (или Револют) - 10 лв на човек\n" +
          "Бъдете навреме, за да започнем навреме.\n" +
          "В описанието и таговете може да намерите адреса на мястото, но за по-сигурно, ще го оставя и тук:\n" +
