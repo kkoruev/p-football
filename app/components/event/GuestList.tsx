@@ -73,19 +73,9 @@ export default function GuestList({invitation, handleOpenModal}: {
                   </ListItemAvatar>
                   <ListItemText
                      primary={<Typography variant="body1">{participant.name}</Typography>}
-                     // secondary={
-                     //    <React.Fragment>
-                     //    <Chip
-                     //       label={participant.status}
-                     //       color={getStatusColor(participant.status)}
-                     //       size="small"
-                     //       variant="outlined"
-                     //    />
-                     //       </React.Fragment>
-                     // }
                   />
+                  <Chip label={participant.status} size="small" variant="outlined" color={getStatusColor(participant.status)}/>
                </ListItem>
-               // <ListItem key={index}>{`${participant.name} (${participant.status})`}</ListItem>
             ))}
          </List>
          <CardActions>
