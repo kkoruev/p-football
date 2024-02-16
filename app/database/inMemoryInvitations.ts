@@ -1,4 +1,4 @@
-import {Invitation} from "~/data/invitation";
+import {Invitation} from "~/data/invitation/invitation";
 
 let invitations: Invitation[] = [
    {
@@ -7,7 +7,8 @@ let invitations: Invitation[] = [
       location: 'City Park',
       maxPlayers: 10,
       currentPlayers: 5,
-      dateTime: '2024-02-01T18:00:00',
+      date: '2024-02-01',
+      time: '23:30'
    },
    {
       id: 2,
@@ -15,7 +16,8 @@ let invitations: Invitation[] = [
       location: 'City Park 2',
       maxPlayers: 10,
       currentPlayers: 8,
-      dateTime: '2024-02-02T18:00:00',
+      date: '2024-02-01',
+      time: '23:30'
    },
 ];
 

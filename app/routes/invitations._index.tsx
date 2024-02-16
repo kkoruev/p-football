@@ -6,7 +6,7 @@ import InvitationEntryCard, {links as invitationEntryCardLinks} from "~/componen
 
 import invitationStyles from '~/styles/invitationsPage.css'
 import {getInvitations, updateInvitation} from "~/database/inMemoryInvitations";
-import {Invitation} from "~/data/invitation";
+import {Invitation} from "~/data/invitation/invitation";
 import {delay} from "~/utils/utils";
 
 export async function loader({request}) {

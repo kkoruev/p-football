@@ -1,5 +1,5 @@
 import {Box, Button, List, ListItem, Modal, Typography} from "@mui/material";
-import {ExpandedInvitation} from "~/data/expanded.invitation";
+import {ExpandedInvitation} from "~/data/invitation/expanded.invitation";
 
 export default function GuestListExpanded({invitation, modalOpen, handleCloseModal}: {
    invitation: ExpandedInvitation,

@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 
 import * as React from 'react';
-import {ExpandedInvitation} from "~/data/expanded.invitation";
+import {ExpandedInvitation} from "~/data/invitation/expanded.invitation";
 
 export default function GuestList({invitation, handleOpenModal}: {
    invitation: ExpandedInvitation,
@@ -45,7 +45,7 @@ export default function GuestList({invitation, handleOpenModal}: {
                <Grid container spacing={2}>
                   <Grid item xs={4}>
                      <Box textAlign="center">
-                        <Typography variant="h4">{invitation.maximumNumberOfPlayers}</Typography>
+                        <Typography variant="h4">{invitation.maxPlayers}</Typography>
                         <Typography variant="caption">Invited</Typography>
                      </Box>
                   </Grid>

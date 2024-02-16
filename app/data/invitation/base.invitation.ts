@@ -1,9 +1,9 @@
 
-export interface Invitation {
+export interface BaseInvitation {
    id: number;
    eventName: string;
    location: string;
    maxPlayers: number;
-   currentPlayers: number;
-   dateTime: string;
+   date: string;
+   time: string;
 }

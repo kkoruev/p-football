@@ -1,6 +1,6 @@
 import {useLoaderData, useParams} from "@remix-run/react";
 import {delay} from "~/utils/utils";
-import {ExpandedInvitation} from "~/data/expanded.invitation";
+import {ExpandedInvitation} from "~/data/invitation/expanded.invitation";
 import {
    Box,
    Container,
@@ -20,6 +20,7 @@ export async function loader({params}) {
    await delay(1000);
 
    const invitation: ExpandedInvitation = {
+      id: 1,
       eventName: 'Футбол Вторник ||',
       location: 'City Park',
       date: '15-02-2024',
@@ -28,7 +29,7 @@ export async function loader({params}) {
       hostName: 'Stoyan Stoyanov',
       currentNumberOfPlayers: 5,
       maybePlayers: 2,
-      maximumNumberOfPlayers: 12,
+      maxPlayers: 12,
       description: "ИГРАЕМ ОТ 20:30 на Winbet Sport & Event Centre!!! \n\n" +
          "Цените са по 120 лв на час заради отоплението ‼️‼️‼️\n" +
          "Носете кеш (или Револют) - 10 лв на човек\n" +

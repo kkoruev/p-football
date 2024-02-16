@@ -1,5 +1,5 @@
 import {Box, Button, Card, CardMedia, Typography} from "@mui/material";
-import {ExpandedInvitation} from "~/data/expanded.invitation";
+import {ExpandedInvitation} from "~/data/invitation/expanded.invitation";
 import {
    AccessTimeFilledRounded,
    CalendarTodayRounded,

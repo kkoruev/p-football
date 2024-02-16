@@ -1,5 +1,5 @@
 import {Box, Button, Card, Divider, Grid, Link, Typography} from "@mui/material";
-import {ExpandedInvitation} from "~/data/expanded.invitation";
+import {ExpandedInvitation} from "~/data/invitation/expanded.invitation";
 import {
    AccessTimeFilledSharp,
    AccessTimeSharp, EventAvailableSharp, EventBusySharp,
