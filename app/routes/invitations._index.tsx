@@ -6,8 +6,8 @@ import InvitationEntryCard, {links as invitationEntryCardLinks} from "~/componen
 
 import invitationStyles from '~/styles/invitationsPage.css'
 import {getInvitations, updateInvitation} from "~/database/inMemoryInvitations";
-import {Invitation} from "~/data/invitation/invitation";
 import {delay} from "~/utils/utils";
+import {ExpandedInvitation} from "~/data/invitation/expanded.invitation";
 
 export async function loader({request}) {
    const url = new URL(request.url);
@@ -23,23 +23,23 @@ export async function action({ request }) {
    const formData = await request.formData();
    const action = formData.get("action");
    const invitationId = Number(formData.get('invitationId'));
-   const invitations: Invitation[] = getInvitations();
-   const invitation: Invitation = invitations.find(invitation => invitation.id === invitationId);
+   const invitations: ExpandedInvitation[] = getInvitations();
+   const invitation: ExpandedInvitation = invitations.find(invitation => invitation.id === invitationId);
 
    // Perform actions based on the form submission
    switch (action) {
       case "Accept":
          // Handle the "Accept" action
 
-         updateInvitation(invitationId, {currentPlayers: (invitation.currentPlayers + 1)});
+         updateInvitation(invitationId, {currentNumberOfPlayers: (invitation.currentNumberOfPlayers + 1)});
          break;
       case "Maybe":
          // Handle the "Maybe" action
-         console.log("Invitation maybe");
+         console.log("ListInvitation maybe");
          break;
       case "Reject":
          // Handle the "Reject" action
-         updateInvitation(invitationId, {currentPlayers: (invitation.currentPlayers - 1)});
+         updateInvitation(invitationId, {currentNumberOfPlayers: (invitation.currentNumberOfPlayers - 1)});
          break;
       default:
          // Handle other actions or errors
@@ -65,7 +65,7 @@ export default function InvitationsPage() {
             )}
 
             { invitations.length && (
-               invitations.map((invitation: Invitation) => (
+               invitations.map((invitation: ExpandedInvitation) => (
                   <InvitationEntryCard key={invitation.id} invitation={invitation}
                                        isLoading="false" actionResult={invitation.id.toString() === invitationId ? actionResult : null}>
                   </InvitationEntryCard>

@@ -45,7 +45,7 @@ export default function GuestList({invitation, handleOpenModal}: {
                <Grid container spacing={2}>
                   <Grid item xs={4}>
                      <Box textAlign="center">
-                        <Typography variant="h4">{invitation.maxPlayers}</Typography>
+                        <Typography variant="h4">{invitation.numberOfPlayers}</Typography>
                         <Typography variant="caption">Invited</Typography>
                      </Box>
                   </Grid>

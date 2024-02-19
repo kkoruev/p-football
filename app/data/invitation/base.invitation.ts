@@ -3,7 +3,7 @@ export interface BaseInvitation {
    id: number;
    eventName: string;
    location: string;
-   maxPlayers: number;
+   numberOfPlayers: number;
    date: string;
    time: string;
 }

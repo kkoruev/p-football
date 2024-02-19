@@ -12,12 +12,12 @@ import {Check, EventAvailable, ThumbDown, ThumbUp} from "@mui/icons-material";
 
 import styles from './invitationEntryCard.css';
 import '~/styles/global.css'
-import {Invitation} from '~/data/invitation/invitation'
 import {Form, Link, useNavigation} from "@remix-run/react";
+import {ExpandedInvitation} from "~/data/invitation/expanded.invitation";
 
 
 export default function InvitationEntryCard({invitation, actionResult}: {
-   invitation: Invitation,
+   invitation: ExpandedInvitation,
    isLoading: boolean,
    actionResult: string | null,
 }) {
@@ -33,8 +33,8 @@ export default function InvitationEntryCard({invitation, actionResult}: {
                   <CardHeader title={invitation.eventName} subheader={invitation.location} className="card-header">
                   </CardHeader>
                   <CardContent className="card-content">
-                     <Typography variant="body2">Max Players: {invitation.maxPlayers}</Typography>
-                     <Typography variant="body2">Current Players: {invitation.currentPlayers}</Typography>
+                     <Typography variant="body2">Max Players: {invitation.numberOfPlayers}</Typography>
+                     <Typography variant="body2">Current Players: {invitation.currentNumberOfPlayers}</Typography>
                      <Typography variant="body2">Date: {invitation.date}</Typography>
                      <Typography variant="body2">Time: {invitation.time}</Typography>
                   </CardContent>

@@ -1,5 +1,5 @@
 import {BaseInvitation} from "~/data/invitation/base.invitation";
 
-export interface Invitation extends BaseInvitation {
+export interface ListInvitation extends BaseInvitation {
    currentPlayers: number;
 }
