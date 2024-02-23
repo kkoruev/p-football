@@ -68,14 +68,6 @@ export default function CreateInvitationsPage() {
       }));
    };
 
-   // const handleSubmit = (e) => {
-   //    e.preventDefault();
-   //    console.log(invitation);
-   //    // Submit formData to your API or server here
-   // };
-
-
-
    return (
       <Container maxWidth="md">
          <Box component="form" method="post" noValidate sx={{mt: 1}}>

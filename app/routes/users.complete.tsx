@@ -1,8 +1,32 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { Box, Button, Container, FormControl, InputLabel, MenuItem, Select, TextField, Typography } from '@mui/material';
+import {User} from "~/data/user";
+import {redirect} from "@remix-run/node";
+import {UserRepository} from "~/repository/user.repository";
+
+
+
+export async function action({request}) {
+   // await UserRepository.createUser("");
+
+   return redirect('/invitations');
+}
 
 export default function CompleteProfilePage() {
    // State and handlers
+
+   const [user, setUser] = useState<User>({
+      age: 0, email: "", name: "", skillLevel: "Beginner", sportType: "Football"
+   });
+
+   const handleChange = (e) => {
+      const {name, value} = e.target;
+      setUser(prevState => ({
+         ...prevState,
+         [name]: value
+      }));
+      console.log(user);
+   };
 
    return (
       <Container maxWidth="md">
@@ -11,14 +35,15 @@ export default function CompleteProfilePage() {
             <Typography variant="body1" sx={{ mt: 2, textAlign: 'center' }}>
                Help us tailor your experience by providing a bit more about your sports preferences and abilities.
             </Typography>
-            <Box component="form" sx={{ mt: 3, width: '100%' }}>
+            <Box component="form" method="post" sx={{ mt: 3, width: '100%' }}>
                <TextField
                   margin="normal"
                   required
                   fullWidth
-                  label="Username"
-                  name="username"
-                  autoComplete="username"
+                  label="Name"
+                  name="name"
+                  autoComplete="name"
+                  onChange={handleChange}
                />
                <TextField
                   margin="normal"
@@ -27,6 +52,7 @@ export default function CompleteProfilePage() {
                   label="Email"
                   name="email"
                   autoComplete="email"
+                  onChange={handleChange}
                />
                <FormControl fullWidth margin="normal">
                   <InputLabel id="sport-type-label">Sport Type</InputLabel>
@@ -35,24 +61,10 @@ export default function CompleteProfilePage() {
                      id="sportType"
                      name="sportType"
                      label="Sport Type"
-                     defaultValue="Football/Soccer" // Assuming single sport type for now
+                     defaultValue="Football" // Assuming single sport type for now
+                     disabled={true}
                   >
-                     <MenuItem value="Football/Soccer">Football/Soccer</MenuItem>
-                  </Select>
-               </FormControl>
-               <FormControl fullWidth margin="normal">
-                  <InputLabel id="position-label">Position</InputLabel>
-                  <Select
-                     labelId="position-label"
-                     id="position"
-                     name="position"
-                     label="Position"
-                     defaultValue=""
-                  >
-                     <MenuItem value="Goalkeeper">Goalkeeper</MenuItem>
-                     <MenuItem value="Defender">Defender</MenuItem>
-                     <MenuItem value="Midfielder">Midfielder</MenuItem>
-                     <MenuItem value="Forward">Forward</MenuItem>
+                     <MenuItem value="Football">Football</MenuItem>
                   </Select>
                </FormControl>
                <TextField
@@ -62,6 +74,7 @@ export default function CompleteProfilePage() {
                   label="Age"
                   name="age"
                   type="number"
+                  onChange={handleChange}
                />
                <FormControl fullWidth margin="normal">
                   <InputLabel id="skill-level-label">Skill Level</InputLabel>
@@ -71,6 +84,7 @@ export default function CompleteProfilePage() {
                      name="skillLevel"
                      label="Skill Level"
                      defaultValue=""
+                     onChange={handleChange}
                   >
                      <MenuItem value="Beginner">Beginner</MenuItem>
                      <MenuItem value="Intermediate">Intermediate</MenuItem>
