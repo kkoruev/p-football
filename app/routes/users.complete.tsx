@@ -1,9 +1,10 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import { Box, Button, Container, FormControl, InputLabel, MenuItem, Select, TextField, Typography } from '@mui/material';
 import {User} from "~/data/user";
-import {redirect} from "@remix-run/node";
-import {prisma} from "~/utils/utils";
+import {json, redirect} from "@remix-run/node";
 import {UserRepository} from "~/repository/user.repository";
+import {useActionData} from "@remix-run/react";
+import {validateUser} from "~/utils/validation";
 
 
 
@@ -19,23 +20,33 @@ export async function action({request}) {
       skillLevel: formData.get("skillLevel")?.toString() || "Beginner"
    }
 
+   const errors = validateUser(userRequest);
+
+   if (Object.keys(errors).length > 0) {
+      return json({errors});
+   }
+
    await UserRepository.createUser(userRequest);
    return redirect('/invitations');
 }
 
 export default function CompleteProfilePage() {
-   // State and handlers
-
    const [user, setUser] = useState<User>({
       age: 0, email: "", name: "", skillLevel: "Beginner", sportType: "Football", position: 'GK'
    });
 
+   const [errors, setErrors] = useState({});
+   const actionData = useActionData<typeof action>();
+
+
    const handleChange = (e) => {
       const {name, value} = e.target;
+
       setUser(prevState => ({
          ...prevState,
          [name]: value
       }));
+      actionData.errors = validateUser(user);
    };
 
    return (
@@ -63,6 +74,8 @@ export default function CompleteProfilePage() {
                   name="email"
                   autoComplete="email"
                   onChange={handleChange}
+                  error={!!actionData?.errors?.email}
+                  helperText={actionData?.errors?.email}
                />
                <FormControl fullWidth margin="normal">
                   <InputLabel id="sport-type-label">Sport Type</InputLabel>
