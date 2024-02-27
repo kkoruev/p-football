@@ -2,13 +2,24 @@ import React, {useState} from 'react';
 import { Box, Button, Container, FormControl, InputLabel, MenuItem, Select, TextField, Typography } from '@mui/material';
 import {User} from "~/data/user";
 import {redirect} from "@remix-run/node";
+import {prisma} from "~/utils/utils";
 import {UserRepository} from "~/repository/user.repository";
 
 
 
 export async function action({request}) {
-   // await UserRepository.createUser("");
+   const formData = await request.formData();
 
+   const userRequest: User = {
+      name: formData.get("name")?.toString() || "",
+      email: formData.get("email")?.toString() || "",
+      sportType: formData.get("sportType")?.toString() || "Football",
+      age: parseInt(formData.get("age")?.toString() || "0", 10),
+      position: formData.get("position")?.toString() || "GK",
+      skillLevel: formData.get("skillLevel")?.toString() || "Beginner"
+   }
+
+   await UserRepository.createUser(userRequest);
    return redirect('/invitations');
 }
 
@@ -16,7 +27,7 @@ export default function CompleteProfilePage() {
    // State and handlers
 
    const [user, setUser] = useState<User>({
-      age: 0, email: "", name: "", skillLevel: "Beginner", sportType: "Football"
+      age: 0, email: "", name: "", skillLevel: "Beginner", sportType: "Football", position: 'GK'
    });
 
    const handleChange = (e) => {
@@ -25,7 +36,6 @@ export default function CompleteProfilePage() {
          ...prevState,
          [name]: value
       }));
-      console.log(user);
    };
 
    return (
@@ -65,6 +75,21 @@ export default function CompleteProfilePage() {
                      disabled={true}
                   >
                      <MenuItem value="Football">Football</MenuItem>
+                  </Select>
+               </FormControl>
+               <FormControl fullWidth margin="normal">
+                  <InputLabel id="position-label">Position</InputLabel>
+                  <Select
+                     labelId="position-label"
+                     id="position"
+                     name="position"
+                     label="Position"
+                     onChange={handleChange}
+                  >
+                     <MenuItem value="GK">GK</MenuItem>
+                     <MenuItem value="DEF">DEF</MenuItem>
+                     <MenuItem value="MID">MID</MenuItem>
+                     <MenuItem value="FWD">FWD</MenuItem>
                   </Select>
                </FormControl>
                <TextField
