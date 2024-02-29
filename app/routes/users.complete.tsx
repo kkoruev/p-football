@@ -7,7 +7,6 @@ import {useActionData} from "@remix-run/react";
 import {validateUser} from "~/utils/validation";
 
 
-
 export async function action({request}) {
    const formData = await request.formData();
 
@@ -35,19 +34,35 @@ export default function CompleteProfilePage() {
       age: 0, email: "", name: "", skillLevel: "Beginner", sportType: "Football", position: 'GK'
    });
 
-   const [errors, setErrors] = useState({});
-   const actionData = useActionData<typeof action>();
+   const [clientErrors, setClientErrors] = useState({});
+   const actionData = useActionData<typeof action>() || {};
 
 
    const handleChange = (e) => {
       const {name, value} = e.target;
+      const newUser: User = { ...user, [name]: value };
+
+      setClientErrors(validateUser(newUser));
 
       setUser(prevState => ({
          ...prevState,
          [name]: value
       }));
-      actionData.errors = validateUser(user);
    };
+
+   const getEmailErrors = (): string => {
+      if (actionData.errors?.email) {
+         return actionData.errors?.email;
+      }
+      return clientErrors.email;
+   }
+
+   const getAgeErrors = (): string => {
+      if (actionData.errors?.age) {
+         return actionData.errors?.age;
+      }
+      return clientErrors.age;
+   }
 
    return (
       <Container maxWidth="md">
@@ -74,8 +89,8 @@ export default function CompleteProfilePage() {
                   name="email"
                   autoComplete="email"
                   onChange={handleChange}
-                  error={!!actionData?.errors?.email}
-                  helperText={actionData?.errors?.email}
+                  error={!!getEmailErrors()}
+                  helperText={getEmailErrors()}
                />
                <FormControl fullWidth margin="normal">
                   <InputLabel id="sport-type-label">Sport Type</InputLabel>
@@ -97,6 +112,7 @@ export default function CompleteProfilePage() {
                      id="position"
                      name="position"
                      label="Position"
+                     defaultValue="GK"
                      onChange={handleChange}
                   >
                      <MenuItem value="GK">GK</MenuItem>
@@ -113,6 +129,8 @@ export default function CompleteProfilePage() {
                   name="age"
                   type="number"
                   onChange={handleChange}
+                  error={!!getAgeErrors()}
+                  helperText={getAgeErrors()}
                />
                <FormControl fullWidth margin="normal">
                   <InputLabel id="skill-level-label">Skill Level</InputLabel>
@@ -121,7 +139,7 @@ export default function CompleteProfilePage() {
                      id="skillLevel"
                      name="skillLevel"
                      label="Skill Level"
-                     defaultValue=""
+                     defaultValue="Beginner"
                      onChange={handleChange}
                   >
                      <MenuItem value="Beginner">Beginner</MenuItem>
