@@ -5,6 +5,7 @@ import {json, redirect} from "@remix-run/node";
 import {UserRepository} from "~/repository/user.repository";
 import {useActionData} from "@remix-run/react";
 import {validateUser} from "~/utils/validation";
+import {ErrorMessages} from "~/utils/error.util";
 
 
 export async function action({request}) {
@@ -52,16 +53,16 @@ export default function CompleteProfilePage() {
 
    const getEmailErrors = (): string => {
       if (actionData.errors?.email) {
-         return actionData.errors?.email;
+         return ErrorMessages[actionData.errors?.email];
       }
-      return clientErrors.email;
+      return ErrorMessages[clientErrors.email];
    }
 
    const getAgeErrors = (): string => {
       if (actionData.errors?.age) {
-         return actionData.errors?.age;
+         return ErrorMessages[actionData.errors?.age]
       }
-      return clientErrors.age;
+      return ErrorMessages[clientErrors.age];
    }
 
    return (

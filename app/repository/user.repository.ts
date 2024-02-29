@@ -8,6 +8,7 @@ export class UserRepository {
          return await prisma.user.create({data: {...user}})
       } catch (error) {
          if (error.constructor.name === 'PrismaClientKnownRequestError') {
+            this.handlePrismaClientError(error);
             console.log("Start");
             console.log(error.code);
             console.log(error.meta);
@@ -16,5 +17,12 @@ export class UserRepository {
          }
          throw error;
       }
+   }
+
+   private static handlePrismaClientError(error: Error): void {
+      if (error.constructor.name !== 'PrismaClientKnownRequestError') {
+         return;
+      }
+      
    }
 }
