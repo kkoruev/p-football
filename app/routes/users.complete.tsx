@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import { Box, Button, Container, FormControl, InputLabel, MenuItem, Select, TextField, Typography } from '@mui/material';
 import {User} from "~/data/user";
 import {json, redirect} from "@remix-run/node";
@@ -6,6 +6,7 @@ import {UserRepository} from "~/repository/user.repository";
 import {useActionData} from "@remix-run/react";
 import {validateUser} from "~/utils/validation";
 import {ErrorMessages} from "~/utils/error.util";
+import {ValidationError} from "~/errors/validation.error";
 
 
 export async function action({request}) {
@@ -20,24 +21,36 @@ export async function action({request}) {
       skillLevel: formData.get("skillLevel")?.toString() || "Beginner"
    }
 
-   const errors = validateUser(userRequest);
+   let errors = validateUser(userRequest);
 
    if (Object.keys(errors).length > 0) {
-      return json({errors});
+      return json({errors, values: userRequest});
    }
 
-   await UserRepository.createUser(userRequest);
+   try {
+      await UserRepository.createUser(userRequest);
+   }  catch (error) {
+      if (error instanceof ValidationError) {
+         errors = error.errors;
+         return json({errors, values: userRequest});
+      }
+   }
    return redirect('/invitations');
 }
 
 export default function CompleteProfilePage() {
    const [user, setUser] = useState<User>({
-      age: 0, email: "", name: "", skillLevel: "Beginner", sportType: "Football", position: 'GK'
-   });
+       age: 0, email: "", name: "", skillLevel: "Beginner", sportType: "Football", position: 'GK'
+   } as User);
 
    const [clientErrors, setClientErrors] = useState({});
    const actionData = useActionData<typeof action>() || {};
 
+   useEffect(() => {
+      if (actionData?.values) {
+         setUser(actionData.values);
+      }
+   }, [actionData]);
 
    const handleChange = (e) => {
       const {name, value} = e.target;
@@ -80,6 +93,7 @@ export default function CompleteProfilePage() {
                   label="Name"
                   name="name"
                   autoComplete="name"
+                  value={user.name}
                   onChange={handleChange}
                />
                <TextField
@@ -89,6 +103,7 @@ export default function CompleteProfilePage() {
                   label="Email"
                   name="email"
                   autoComplete="email"
+                  value={user.email}
                   onChange={handleChange}
                   error={!!getEmailErrors()}
                   helperText={getEmailErrors()}
@@ -114,6 +129,7 @@ export default function CompleteProfilePage() {
                      name="position"
                      label="Position"
                      defaultValue="GK"
+                     value={user.position}
                      onChange={handleChange}
                   >
                      <MenuItem value="GK">GK</MenuItem>
@@ -129,6 +145,7 @@ export default function CompleteProfilePage() {
                   label="Age"
                   name="age"
                   type="number"
+                  value={user.age}
                   onChange={handleChange}
                   error={!!getAgeErrors()}
                   helperText={getAgeErrors()}
@@ -141,6 +158,7 @@ export default function CompleteProfilePage() {
                      name="skillLevel"
                      label="Skill Level"
                      defaultValue="Beginner"
+                     value={user.skillLevel}
                      onChange={handleChange}
                   >
                      <MenuItem value="Beginner">Beginner</MenuItem>

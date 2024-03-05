@@ -1,8 +1,10 @@
+import {ErrorCode} from "~/errors/error.code";
 
 export class ValidationError extends Error {
-   message: string;
+   errors: {};
 
-   constructor(message: string = 'Validation failed') {
+   constructor(errors, message: string = 'Validation failed') {
       super(message);
+      this.errors = errors;
    }
 }

@@ -1,5 +1,7 @@
 import {User} from "~/data/user";
 import {prisma} from "~/utils/utils";
+import {ValidationError} from "~/errors/validation.error";
+import {ErrorCode} from "~/errors/error.code";
 
 export class UserRepository {
 
@@ -7,14 +9,7 @@ export class UserRepository {
       try {
          return await prisma.user.create({data: {...user}})
       } catch (error) {
-         if (error.constructor.name === 'PrismaClientKnownRequestError') {
-            this.handlePrismaClientError(error);
-            console.log("Start");
-            console.log(error.code);
-            console.log(error.meta);
-            console.log(error.message);
-            console.log("End");
-         }
+         this.handlePrismaClientError(error);
          throw error;
       }
    }
@@ -23,6 +18,8 @@ export class UserRepository {
       if (error.constructor.name !== 'PrismaClientKnownRequestError') {
          return;
       }
-      
+      if (error.meta.target.includes('email') && error.code === 'P2002') {
+         throw new ValidationError({email: ErrorCode.UserEmailAlreadyExists});
+      }
    }
 }

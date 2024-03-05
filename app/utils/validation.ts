@@ -1,5 +1,5 @@
 import {User} from "~/data/user";
-import {ErrorCodes} from "~/errors/error.codes";
+import {ErrorCode} from "~/errors/error.code";
 
 export function validateEmail(email: string): boolean {
    if (email?.length === 0) {
@@ -19,11 +19,11 @@ export function validateAge(age: number): boolean {
 export function validateUser(user: User) {
    const errors = {};
    if (!validateEmail(user.email)) {
-      errors.email = ErrorCodes.InvalidEmail;
+      errors.email = ErrorCode.InvalidEmail;
    }
 
    if (!validateAge(user.age)) {
-      errors.age = ErrorCodes.AgeRequired;
+      errors.age = ErrorCode.AgeRequired;
    }
 
    return errors;
