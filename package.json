@@ -5,9 +5,9 @@
   "type": "module",
   "scripts": {
     "build": "remix build",
-    "dev": "remix dev --manual",
+    "dev": "remix dev --manual -c \"node --watch-path server/server.js --watch server/server.js\"",
     "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
-    "start": "remix-serve ./build/index.js",
+    "start": "cross-env NODE_ENV=production node ./server.js",
     "typecheck": "tsc"
   },
   "dependencies": {
@@ -17,13 +17,19 @@
     "@mui/material": "^5.15.7",
     "@prisma/client": "^5.10.2",
     "@remix-run/css-bundle": "^2.5.1",
+    "@remix-run/express": "^2.8.0",
     "@remix-run/node": "^2.5.1",
     "@remix-run/react": "^2.5.1",
     "@remix-run/serve": "^2.5.1",
+    "compression": "^1.7.4",
+    "express": "^4.18.3",
     "isbot": "^4.1.0",
+    "morgan": "^1.10.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "remix": "^2.5.1"
+    "remix": "^2.5.1",
+    "source-map-support": "^0.5.21",
+    "ts-node": "^10.9.2"
   },
   "devDependencies": {
     "@remix-run/dev": "^2.5.1",
@@ -38,7 +44,8 @@
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",
     "prisma": "^5.10.2",
-    "typescript": "^5.1.6"
+    "tsx": "^4.7.1",
+    "typescript": "^5.3.3"
   },
   "engines": {
     "node": ">=18.0.0"

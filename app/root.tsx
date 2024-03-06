@@ -9,7 +9,7 @@ function createFacebookSDKScript() {
    return `
     window.fbAsyncInit = function() {
       FB.init({
-        appId: '1167415367956511',
+        appId: '1344826609540424',
         cookie: true,
         xfbml: true,
         version: 'v10.0'
