@@ -1,6 +1,7 @@
 import * as fs from "node:fs";
 import * as path from "node:path";
 import * as url from "node:url";
+import https from "node:https";
 
 import { createRequestHandler } from "@remix-run/express";
 import { broadcastDevReady, installGlobals } from "@remix-run/node";
@@ -38,6 +39,11 @@ const remixHandler =
       ? await createDevRequestHandler(initialBuild)
       : createRequestHandler({ build: initialBuild });
 
+const __filename = url.fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const key = fs.readFileSync(path.resolve(__dirname, 'cert/localhost+2-key.pem'), 'utf8');
+const cert = fs.readFileSync(path.resolve(__dirname, 'cert/localhost+2.pem'), 'utf8');
+
 const app = express();
 
 app.use(compression());
@@ -59,8 +65,11 @@ app.use(morgan("tiny"));
 
 app.all("*", remixHandler);
 
+const httpsOptions = { key, cert };
+const server = https.createServer(httpsOptions, app);
+
 const port = process.env.PORT || 3000;
-app.listen(port, async () => {
+server.listen(port, async () => {
    console.log(`Express server listening at http://localhost:${port}`);
 
    if (process.env.NODE_ENV === "development") {
