@@ -1,13 +1,27 @@
 import React, {useEffect, useState} from 'react';
 import { Box, Button, Container, FormControl, InputLabel, MenuItem, Select, TextField, Typography } from '@mui/material';
-import {User} from "~/data/user";
+import {SessionUser, User} from "~/data/user";
 import {json, redirect} from "@remix-run/node";
 import {UserRepository} from "~/repository/user.repository";
-import {useActionData} from "@remix-run/react";
+import {useActionData, useLoaderData} from "@remix-run/react";
 import {validateUser} from "~/utils/validation";
 import {ErrorMessages} from "~/utils/error.util";
 import {ValidationError} from "~/errors/validation.error";
+import {destroyUserSession, getUserSession} from "~/sessions/user.session";
 
+export async function loader({request}) {
+   const session = await getUserSession(
+      request.headers.get("Cookie")
+   );
+
+   if (!session.has("name")) {
+      // we need to send some error or show error page
+   }
+
+   const sessionUser: SessionUser = {...session.data};
+
+   return json({sessionUser});
+}
 
 export async function action({request}) {
    const formData = await request.formData();
@@ -39,8 +53,11 @@ export async function action({request}) {
 }
 
 export default function CompleteProfilePage() {
+   const data = useLoaderData<typeof loader>();
+   const sessionUser = data?.sessionUser;
+
    const [user, setUser] = useState<User>({
-       age: 0, email: "", name: "", skillLevel: "Beginner", sportType: "Football", position: 'GK'
+       age: 0, email: sessionUser.email, name: sessionUser. name, skillLevel: "Beginner", sportType: "Football", position: 'GK'
    } as User);
 
    const [clientErrors, setClientErrors] = useState({});
