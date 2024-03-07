@@ -7,3 +7,9 @@ export interface User {
    age: number;
    skillLevel: 'Beginner' | 'Intermediate' | 'Advanced' | 'Professional';
 }
+
+export interface SessionUser {
+   name: string;
+   email: string;
+   fbId: string;
+}

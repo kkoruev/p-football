@@ -1,18 +1,41 @@
 import {Box, Button, Container, Typography} from "@mui/material";
 import {Facebook} from "@mui/icons-material";
 import {useState} from "react";
+import {redirect} from "@remix-run/node";
+import {useFetcher, useSubmit} from "@remix-run/react";
+import {commitUserSession, getUserSession} from "~/sessions/user.session";
+import {SessionUser} from "~/data/user";
 
+
+export async function action({request}) {
+   const session = await getUserSession(request.headers.get("Cookie"));
+   const user = await request.json();
+   const sessionUser: SessionUser = {...user};
+
+   session.set("fbId", sessionUser.fbId);
+   session.set("name", sessionUser.name);
+   session.set("email", sessionUser.email);
+
+   return redirect('users/complete', {
+      status: 302,
+      headers: {
+         "Set-Cookie": await commitUserSession(session),
+      }
+   });
+}
 
 export default function HomePage() {
    const [userName, setUserName] = useState('');
+   const fetcher = useFetcher();
 
    const handleLogin = () => {
       if (FB) {
          FB.login(function(response) {
             if (response.authResponse) {
                console.log('Welcome! Fetching your information.... ');
-               FB.api('/me', {fields: 'name_format,short_name,name,email,picture'}, function(response) {
-                  setUserName(response.name); // Set the user name in state
+               FB.api('/me', {fields: 'name_format,short_name,name,email,picture'}, async function (response) {
+                  const sessionUser: SessionUser = {name: response.name, email: response.email, fbId: response.id};
+                  fetcher.submit({...sessionUser}, {method: 'post', encType: "application/json"});
                });
             } else {
                console.log('User cancelled login or did not fully authorize.');
