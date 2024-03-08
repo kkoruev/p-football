@@ -31,6 +31,7 @@ export async function action({request}) {
       email: formData.get("email")?.toString() || "",
       sportType: formData.get("sportType")?.toString() || "Football",
       age: parseInt(formData.get("age")?.toString() || "0", 10),
+      city: formData.get("city")?.toString() || "Sofia",
       position: formData.get("position")?.toString() || "GK",
       skillLevel: formData.get("skillLevel")?.toString() || "Beginner"
    }
@@ -57,7 +58,7 @@ export default function CompleteProfilePage() {
    const sessionUser = data?.sessionUser;
 
    const [user, setUser] = useState<User>({
-       age: 0, email: sessionUser.email, name: sessionUser. name, skillLevel: "Beginner", sportType: "Football", position: 'GK'
+       age: "", email: sessionUser.email || "", name: sessionUser.name || "", skillLevel: "Beginner", sportType: "Football", position: 'GK'
    } as User);
 
    const [clientErrors, setClientErrors] = useState({});
@@ -125,6 +126,35 @@ export default function CompleteProfilePage() {
                   error={!!getEmailErrors()}
                   helperText={getEmailErrors()}
                />
+               <TextField
+                  margin="normal"
+                  required
+                  fullWidth
+                  label="Age"
+                  name="age"
+                  type="number"
+                  value={user.age}
+                  onChange={handleChange}
+                  error={!!getAgeErrors()}
+                  helperText={getAgeErrors()}
+               />
+               <FormControl fullWidth margin="normal">
+                  <InputLabel id="city-label">City</InputLabel>
+                  <Select
+                     labelId="city-label"
+                     id="city"
+                     required
+                     name="city"
+                     label="Position"
+                     defaultValue="Sofia"
+                     value={user.city}
+                     onChange={handleChange}
+                  >
+                     <MenuItem value="Sofia">Sofia</MenuItem>
+                     <MenuItem value="Plovdiv">Plovdiv</MenuItem>
+                     <MenuItem value="Varna">Varna</MenuItem>
+                  </Select>
+               </FormControl>
                <FormControl fullWidth margin="normal">
                   <InputLabel id="sport-type-label">Sport Type</InputLabel>
                   <Select
@@ -155,18 +185,6 @@ export default function CompleteProfilePage() {
                      <MenuItem value="FWD">FWD</MenuItem>
                   </Select>
                </FormControl>
-               <TextField
-                  margin="normal"
-                  required
-                  fullWidth
-                  label="Age"
-                  name="age"
-                  type="number"
-                  value={user.age}
-                  onChange={handleChange}
-                  error={!!getAgeErrors()}
-                  helperText={getAgeErrors()}
-               />
                <FormControl fullWidth margin="normal">
                   <InputLabel id="skill-level-label">Skill Level</InputLabel>
                   <Select
