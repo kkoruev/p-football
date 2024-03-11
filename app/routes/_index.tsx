@@ -5,6 +5,7 @@ import {redirect} from "@remix-run/node";
 import {useFetcher, useSubmit} from "@remix-run/react";
 import {commitUserSession, getUserSession} from "~/sessions/user.session";
 import {SessionUser} from "~/data/user";
+import {UserRepository} from "~/repository/user.repository";
 
 
 export async function action({request}) {
@@ -15,6 +16,14 @@ export async function action({request}) {
    session.set("fbId", sessionUser.fbId);
    session.set("name", sessionUser.name);
    session.set("email", sessionUser.email);
+
+   const dbUser = await UserRepository.findUser(sessionUser.fbId);
+
+   console.log(dbUser);
+
+   if (!dbUser) {
+      return redirect('/invitations')
+   }
 
    return redirect('users/complete', {
       status: 302,

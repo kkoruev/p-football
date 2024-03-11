@@ -14,6 +14,14 @@ export class UserRepository {
       }
    }
 
+   static async findUser(fbId: string): Promise<User> {
+      return await prisma.user.findUnique({
+         where: {
+            fbId: fbId
+         }
+      });
+   }
+
    private static handlePrismaClientError(error: Error): void {
       if (error.constructor.name !== 'PrismaClientKnownRequestError') {
          return;

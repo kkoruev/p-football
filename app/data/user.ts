@@ -2,6 +2,7 @@
 export interface User {
    name: string;
    email: string;
+   fbId?: string;
    sportType: 'Football';
    city: string;
    position: 'GK' | 'DEF' | 'MID' | 'FWD'

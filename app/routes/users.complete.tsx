@@ -31,6 +31,7 @@ export async function action({request}) {
       email: formData.get("email")?.toString() || "",
       sportType: formData.get("sportType")?.toString() || "Football",
       age: parseInt(formData.get("age")?.toString() || "0", 10),
+      fbId: formData.get("fbId")?.toString() || "",
       city: formData.get("city")?.toString() || "Sofia",
       position: formData.get("position")?.toString() || "GK",
       skillLevel: formData.get("skillLevel")?.toString() || "Beginner"
@@ -57,8 +58,9 @@ export default function CompleteProfilePage() {
    const data = useLoaderData<typeof loader>();
    const sessionUser = data?.sessionUser;
 
+   // check how to store the fbId here to save it in the DB.
    const [user, setUser] = useState<User>({
-       age: "", email: sessionUser.email || "", name: sessionUser.name || "", skillLevel: "Beginner", sportType: "Football", position: 'GK'
+       age: "", email: sessionUser.email || "", name: sessionUser.name || "", skillLevel: "Beginner", sportType: "Football", position: 'GK', fbId: sessionUser.fbId
    } as User);
 
    const [clientErrors, setClientErrors] = useState({});
@@ -201,6 +203,7 @@ export default function CompleteProfilePage() {
                      <MenuItem value="Advanced">Advanced</MenuItem>
                      <MenuItem value="Professional">Professional</MenuItem>
                   </Select>
+                  <input type="hidden" name="fbId" value={user.fbId} />
                </FormControl>
                <Button
                   type="submit"

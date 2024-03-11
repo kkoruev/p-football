@@ -16,6 +16,7 @@ model User {
     position    String
     age         Int
     skillLevel  String
+    fbId        String  @unique
 }
 
 
