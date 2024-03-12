@@ -14,7 +14,15 @@ export class UserRepository {
       }
    }
 
-   static async findUser(fbId: string): Promise<User> {
+   static async findUniqueUser(id: number) {
+      return await prisma.user.findUnique({
+         where: {
+            id: id
+         }
+      });
+   }
+
+   static async findUniqueFbUser(fbId: string): Promise<User> {
       return await prisma.user.findUnique({
          where: {
             fbId: fbId

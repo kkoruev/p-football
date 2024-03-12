@@ -17,11 +17,12 @@ export async function action({request}) {
    session.set("name", sessionUser.name);
    session.set("email", sessionUser.email);
 
-   const dbUser = await UserRepository.findUser(sessionUser.fbId);
+   // const dbUser = await UserRepository.findUniqueFbUser(sessionUser.fbId);
+   const dbUser = await UserRepository.findUniqueUser(4);
 
    console.log(dbUser);
 
-   if (!dbUser) {
+   if (dbUser) {
       return redirect('/invitations')
    }
 

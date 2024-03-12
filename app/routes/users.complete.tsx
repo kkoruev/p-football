@@ -7,35 +7,45 @@ import {useActionData, useLoaderData} from "@remix-run/react";
 import {validateUser} from "~/utils/validation";
 import {ErrorMessages} from "~/utils/error.util";
 import {ValidationError} from "~/errors/validation.error";
-import {destroyUserSession, getUserSession} from "~/sessions/user.session";
+import {commitUserSession, destroyUserSession, getUserSession} from "~/sessions/user.session";
 
 export async function loader({request}) {
+   console.log("In loader");
    const session = await getUserSession(
       request.headers.get("Cookie")
    );
 
    if (!session.has("name")) {
-      // we need to send some error or show error page
+      return redirect("/");
    }
 
    const sessionUser: SessionUser = {...session.data};
-
-   return json({sessionUser});
+   session.unset("name");
+   return json({sessionUser}, {
+      headers: {
+         "Set-Cookie": await commitUserSession(session),
+      }
+   });
 }
 
 export async function action({request}) {
+   const session = await getUserSession(request.headers.get("Cookie"));
+   console.log("In action");
    const formData = await request.formData();
-
    const userRequest: User = {
       name: formData.get("name")?.toString() || "",
       email: formData.get("email")?.toString() || "",
       sportType: formData.get("sportType")?.toString() || "Football",
       age: parseInt(formData.get("age")?.toString() || "0", 10),
-      fbId: formData.get("fbId")?.toString() || "",
+      fbId: formData.get("fbId")?.toString() || null,
       city: formData.get("city")?.toString() || "Sofia",
       position: formData.get("position")?.toString() || "GK",
       skillLevel: formData.get("skillLevel")?.toString() || "Beginner"
    }
+
+   session.set("fbId", userRequest.fbId);
+   session.set("name", userRequest.name);
+   session.set("email", userRequest.email);
 
    let errors = validateUser(userRequest);
 
@@ -44,12 +54,19 @@ export async function action({request}) {
    }
 
    try {
+      console.log(userRequest);
       await UserRepository.createUser(userRequest);
    }  catch (error) {
       if (error instanceof ValidationError) {
          errors = error.errors;
-         return json({errors, values: userRequest});
+         return json({errors, values: userRequest}, {
+            status: 302,
+            headers: {
+               "Set-Cookie": await commitUserSession(session),
+            }});
       }
+      console.log(error);
+      // handle different kind of errors here
    }
    return redirect('/invitations');
 }
