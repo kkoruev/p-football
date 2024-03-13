@@ -2,7 +2,6 @@
 export interface User {
    name: string;
    email: string;
-   fbId?: string;
    sportType: 'Football';
    city: string;
    position: 'GK' | 'DEF' | 'MID' | 'FWD'
@@ -15,5 +14,9 @@ export const cities: string[] = ["Sofia", "Plovdiv", "Varna"];
 export interface SessionUser {
    name: string;
    email: string;
+   fbId: string;
+}
+
+export interface FbProfile {
    fbId: string;
 }

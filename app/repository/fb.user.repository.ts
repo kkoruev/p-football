@@ -1,13 +1,17 @@
-import {User} from "~/data/user";
+import {FbProfile, User} from "~/data/user";
 import {prisma} from "~/utils/utils";
 import {ValidationError} from "~/errors/validation.error";
 import {ErrorCode} from "~/errors/error.code";
 
-export class UserRepository {
+export class FbUserRepository {
 
-   static async createUser(user: User) {
+   static async createUser(user: User, fbProfile: FbProfile) {
       try {
-         return await prisma.user.create({data: {...user}})
+         return await prisma.user.create({data: {...user, fbProfile: {
+            create: {
+               ...fbProfile
+            }
+         }}})
       } catch (error) {
          this.handlePrismaClientError(error);
          throw error;

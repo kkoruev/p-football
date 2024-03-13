@@ -2,6 +2,10 @@ import {User} from "~/data/user";
 import {ErrorCode} from "~/errors/error.code";
 
 export function validateEmail(email: string): boolean {
+   if (email == null) {
+      return false;
+   }
+
    if (email?.length === 0) {
       return true;
    }

@@ -5,7 +5,7 @@ import {redirect} from "@remix-run/node";
 import {useFetcher, useSubmit} from "@remix-run/react";
 import {commitUserSession, getUserSession} from "~/sessions/user.session";
 import {SessionUser} from "~/data/user";
-import {UserRepository} from "~/repository/user.repository";
+import {FbUserRepository} from "~/repository/fb.user.repository";
 
 
 export async function action({request}) {
@@ -18,7 +18,7 @@ export async function action({request}) {
    session.set("email", sessionUser.email);
 
    // const dbUser = await UserRepository.findUniqueFbUser(sessionUser.fbId);
-   const dbUser = await UserRepository.findUniqueUser(4);
+   const dbUser = await FbUserRepository.findUniqueUser(4);
 
    console.log(dbUser);
 

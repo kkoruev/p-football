@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import { Box, Button, Container, FormControl, InputLabel, MenuItem, Select, TextField, Typography } from '@mui/material';
-import {SessionUser, User} from "~/data/user";
+import {FbProfile, SessionUser, User} from "~/data/user";
 import {json, redirect} from "@remix-run/node";
-import {UserRepository} from "~/repository/user.repository";
+import {FbUserRepository} from "~/repository/fb.user.repository";
 import {useActionData, useLoaderData} from "@remix-run/react";
 import {validateUser} from "~/utils/validation";
 import {ErrorMessages} from "~/utils/error.util";
@@ -11,16 +11,19 @@ import {commitUserSession, destroyUserSession, getUserSession} from "~/sessions/
 
 export async function loader({request}) {
    console.log("In loader");
+   console.log(request);
+
    const session = await getUserSession(
       request.headers.get("Cookie")
    );
+
+   console.log(session.data);
 
    if (!session.has("name")) {
       return redirect("/");
    }
 
    const sessionUser: SessionUser = {...session.data};
-   session.unset("name");
    return json({sessionUser}, {
       headers: {
          "Set-Cookie": await commitUserSession(session),
@@ -32,30 +35,43 @@ export async function action({request}) {
    const session = await getUserSession(request.headers.get("Cookie"));
    console.log("In action");
    const formData = await request.formData();
+
    const userRequest: User = {
       name: formData.get("name")?.toString() || "",
-      email: formData.get("email")?.toString() || "",
+      email: formData.get("email")?.toString() || null,
       sportType: formData.get("sportType")?.toString() || "Football",
       age: parseInt(formData.get("age")?.toString() || "0", 10),
-      fbId: formData.get("fbId")?.toString() || null,
       city: formData.get("city")?.toString() || "Sofia",
       position: formData.get("position")?.toString() || "GK",
       skillLevel: formData.get("skillLevel")?.toString() || "Beginner"
    }
 
-   session.set("fbId", userRequest.fbId);
+   const fbProfile: FbProfile = {
+      fbId: formData.get("fbId")?.toString() || null
+   }
+
+   session.set("fbId", fbProfile.fbId);
    session.set("name", userRequest.name);
    session.set("email", userRequest.email);
 
+
    let errors = validateUser(userRequest);
+   console.error(errors);
 
    if (Object.keys(errors).length > 0) {
-      return json({errors, values: userRequest});
+      // put the session key here of course.
+      console.log(session.data);
+      return json({errors, values: userRequest}, {
+         headers: {
+            "Set-Cookie": await destroyUserSession(session),
+            "Test-it": "1"
+         }
+      });
    }
 
    try {
       console.log(userRequest);
-      await UserRepository.createUser(userRequest);
+      await FbUserRepository.createUser(userRequest, fbProfile);
    }  catch (error) {
       if (error instanceof ValidationError) {
          errors = error.errors;
@@ -144,6 +160,7 @@ export default function CompleteProfilePage() {
                   onChange={handleChange}
                   error={!!getEmailErrors()}
                   helperText={getEmailErrors()}
+                  disabled="true"
                />
                <TextField
                   margin="normal"
