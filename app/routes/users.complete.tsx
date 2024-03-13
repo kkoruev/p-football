@@ -24,15 +24,10 @@ export async function loader({request}) {
    }
 
    const sessionUser: SessionUser = {...session.data};
-   return json({sessionUser}, {
-      headers: {
-         "Set-Cookie": await commitUserSession(session),
-      }
-   });
+   return json({sessionUser});
 }
 
 export async function action({request}) {
-   const session = await getUserSession(request.headers.get("Cookie"));
    console.log("In action");
    const formData = await request.formData();
 
@@ -50,23 +45,12 @@ export async function action({request}) {
       fbId: formData.get("fbId")?.toString() || null
    }
 
-   session.set("fbId", fbProfile.fbId);
-   session.set("name", userRequest.name);
-   session.set("email", userRequest.email);
-
-
    let errors = validateUser(userRequest);
    console.error(errors);
 
    if (Object.keys(errors).length > 0) {
       // put the session key here of course.
-      console.log(session.data);
-      return json({errors, values: userRequest}, {
-         headers: {
-            "Set-Cookie": await destroyUserSession(session),
-            "Test-it": "1"
-         }
-      });
+      return json({errors, values: userRequest});
    }
 
    try {
@@ -75,16 +59,20 @@ export async function action({request}) {
    }  catch (error) {
       if (error instanceof ValidationError) {
          errors = error.errors;
-         return json({errors, values: userRequest}, {
-            status: 302,
-            headers: {
-               "Set-Cookie": await commitUserSession(session),
-            }});
+         return json({errors, values: userRequest});
       }
       console.log(error);
       // handle different kind of errors here
    }
-   return redirect('/invitations');
+
+   const session = await getUserSession(
+      request.headers.get("Cookie")
+   );
+   return redirect('/invitations', {
+      status: 302,
+      headers: {
+         "Set-Cookie": await commitUserSession(session),
+      }});
 }
 
 export default function CompleteProfilePage() {
