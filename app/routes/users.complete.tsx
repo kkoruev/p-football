@@ -10,14 +10,9 @@ import {ValidationError} from "~/errors/validation.error";
 import {commitUserSession, destroyUserSession, getUserSession} from "~/sessions/user.session";
 
 export async function loader({request}) {
-   console.log("In loader");
-   console.log(request);
-
    const session = await getUserSession(
       request.headers.get("Cookie")
    );
-
-   console.log(session.data);
 
    if (!session.has("name")) {
       return redirect("/");
@@ -40,13 +35,14 @@ export async function action({request}) {
       position: formData.get("position")?.toString() || "GK",
       skillLevel: formData.get("skillLevel")?.toString() || "Beginner"
    }
+   console.log("email " + formData.get("email")?.toString());
+   console.log(userRequest);
 
    const fbProfile: FbProfile = {
       fbId: formData.get("fbId")?.toString() || null
    }
 
    let errors = validateUser(userRequest);
-   console.error(errors);
 
    if (Object.keys(errors).length > 0) {
       // put the session key here of course.
@@ -77,15 +73,17 @@ export async function action({request}) {
 
 export default function CompleteProfilePage() {
    const data = useLoaderData<typeof loader>();
+   const actionData = useActionData<typeof action>() || {};
+
    const sessionUser = data?.sessionUser;
 
    // check how to store the fbId here to save it in the DB.
    const [user, setUser] = useState<User>({
-       age: "", email: sessionUser.email || "", name: sessionUser.name || "", skillLevel: "Beginner", sportType: "Football", position: 'GK', fbId: sessionUser.fbId
+       age: "", email: sessionUser.email || "", name: actionData?.values?.name || sessionUser.name || "", skillLevel: "Beginner", sportType: "Football", position: 'GK', fbId: sessionUser.fbId
    } as User);
 
    const [clientErrors, setClientErrors] = useState({});
-   const actionData = useActionData<typeof action>() || {};
+
 
    useEffect(() => {
       if (actionData?.values) {
@@ -141,14 +139,14 @@ export default function CompleteProfilePage() {
                   margin="normal"
                   required
                   fullWidth
-                  label="Email"
                   name="email"
                   autoComplete="email"
                   value={user.email}
-                  onChange={handleChange}
                   error={!!getEmailErrors()}
                   helperText={getEmailErrors()}
-                  disabled="true"
+                  InputProps={{
+                     readOnly: true,
+                  }}
                />
                <TextField
                   margin="normal"
