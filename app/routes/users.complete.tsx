@@ -23,7 +23,6 @@ export async function loader({request}) {
 }
 
 export async function action({request}) {
-   console.log("In action");
    const formData = await request.formData();
 
    const userRequest: User = {
@@ -35,8 +34,6 @@ export async function action({request}) {
       position: formData.get("position")?.toString() || "GK",
       skillLevel: formData.get("skillLevel")?.toString() || "Beginner"
    }
-   console.log("email " + formData.get("email")?.toString());
-   console.log(userRequest);
 
    const fbProfile: FbProfile = {
       fbId: formData.get("fbId")?.toString() || null
@@ -50,7 +47,6 @@ export async function action({request}) {
    }
 
    try {
-      console.log(userRequest);
       await FbUserRepository.createUser(userRequest, fbProfile);
    }  catch (error) {
       if (error instanceof ValidationError) {
@@ -67,7 +63,7 @@ export async function action({request}) {
    return redirect('/invitations', {
       status: 302,
       headers: {
-         "Set-Cookie": await commitUserSession(session),
+         "Set-Cookie": await destroyUserSession(session),
       }});
 }
 
@@ -144,9 +140,7 @@ export default function CompleteProfilePage() {
                   value={user.email}
                   error={!!getEmailErrors()}
                   helperText={getEmailErrors()}
-                  InputProps={{
-                     readOnly: true,
-                  }}
+                  disabled="true"
                />
                <TextField
                   margin="normal"
@@ -224,6 +218,7 @@ export default function CompleteProfilePage() {
                      <MenuItem value="Professional">Professional</MenuItem>
                   </Select>
                   <input type="hidden" name="fbId" value={user.fbId} />
+                  <input type="hidden" name="email" value={user.email}/>
                </FormControl>
                <Button
                   type="submit"

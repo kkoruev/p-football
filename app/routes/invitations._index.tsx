@@ -15,7 +15,6 @@ export async function loader({request}) {
    const invitationId = url.searchParams.get('id');
 
    const invitations = getInvitations();
-   await delay(2000);
    return json({invitations, actionResult, invitationId});
 }
 

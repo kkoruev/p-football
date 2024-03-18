@@ -4,6 +4,8 @@ import theme from "~/utils/theme";
 import {ThemeProvider} from "@mui/material";
 
 import globalCss from '~/styles/global.css';
+import {links as headerStyles} from '~/components/header/header'
+import RootLayout from "~/components/root/root.layout";
 
 function createFacebookSDKScript() {
    return `
@@ -35,13 +37,15 @@ export default function App() {
             name="viewport"
             content="width=device-width, initial-scale=1"
          />
-         <title>Remix: So great, it's funny!</title>
+         <title>SportsHub</title>
          <Links />
          <script dangerouslySetInnerHTML={{ __html: createFacebookSDKScript() }} />
       </head>
       <body>
       <ThemeProvider theme={theme}>
-         <Outlet />
+         <RootLayout>
+            <Outlet />
+         </RootLayout>
       </ThemeProvider>
       <Scripts />
       <LiveReload />
@@ -51,5 +55,5 @@ export default function App() {
 }
 
 export function links() {
-   return [{rel: 'stylesheet', href: globalCss}];
+   return [...headerStyles(), {rel: 'stylesheet', href: globalCss}];
 }
