@@ -1,4 +1,4 @@
-import { createCookieSessionStorage } from "@remix-run/node"; // or cloudflare/deno
+import { createCookieSessionStorage } from "@remix-run/node";
 
 type SessionData = {
   fbId: string;
@@ -14,9 +14,6 @@ export const { getSession: getUserSession, destroySession: destroyUserSession, c
    {
       cookie: {
          name: "__user_session",
-
-         // all of these are optional
-         domain: "localhost",
 
          httpOnly: true,
          maxAge: 300,
