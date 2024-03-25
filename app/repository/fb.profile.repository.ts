@@ -6,6 +6,9 @@ export class FbProfileRepository {
       return await prisma.fbProfile.findUnique({
          where: {
             fbId: fbId
+         },
+         include: {
+            user: true
          }
       });
    }

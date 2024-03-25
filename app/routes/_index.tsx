@@ -7,30 +7,39 @@ import {commitUserSession, getUserSession} from "~/sessions/user.session";
 import {SessionUser} from "~/data/user";
 import {FbUserRepository} from "~/repository/fb.user.repository";
 import {FbProfileRepository} from "~/repository/fb.profile.repository";
+import {commitProfileSession, getProfileSession} from "~/sessions/profile.session";
 
 
 export async function action({request}) {
-   const session = await getUserSession(request.headers.get("Cookie"));
    const user = await request.json();
    const sessionUser: SessionUser = {...user};
-
-   session.set("fbId", sessionUser.fbId);
-   session.set("name", sessionUser.name);
-   session.set("email", sessionUser.email);
 
    // const dbUser = await UserRepository.findUniqueFbUser(sessionUser.fbId);
    const fbProfile = await FbProfileRepository.findFbProfile(sessionUser.fbId);
 
-   console.log(fbProfile);
-
    if (fbProfile) {
-      return redirect('/invitations')
+      console.log(fbProfile);
+
+      const profileSession = await getProfileSession(request.headers.get("Cookie"));
+      profileSession.set("id", fbProfile.user.id);
+      profileSession.set("name", fbProfile.user.name);
+      return redirect('/invitations', {
+         status: 302,
+         headers: {
+            "Set-Cookie": await commitProfileSession(profileSession),
+         }
+      });
    }
+
+   const userSession = await getUserSession(request.headers.get("Cookie"));
+   userSession.set("fbId", sessionUser.fbId);
+   userSession.set("name", sessionUser.name);
+   userSession.set("email", sessionUser.email);
 
    return redirect('users/complete', {
       status: 302,
       headers: {
-         "Set-Cookie": await commitUserSession(session),
+         "Set-Cookie": await commitUserSession(userSession),
       }
    });
 }
