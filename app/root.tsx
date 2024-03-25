@@ -1,4 +1,4 @@
-import {Links, LiveReload, Outlet, Scripts} from '@remix-run/react'
+import {Links, LiveReload, Outlet, Scripts, useLoaderData} from '@remix-run/react'
 
 import theme from "~/utils/theme";
 import {ThemeProvider} from "@mui/material";
@@ -6,6 +6,7 @@ import {ThemeProvider} from "@mui/material";
 import globalCss from '~/styles/global.css';
 import {links as headerStyles} from '~/components/header/header'
 import RootLayout from "~/components/root/root.layout";
+import {json} from "@remix-run/node";
 
 function createFacebookSDKScript() {
    return `
@@ -28,7 +29,14 @@ function createFacebookSDKScript() {
   `;
 }
 
+export async function loader({params}) {
+   const isLoggedIn = true;
+   return json({isLoggedIn});
+}
+
 export default function App() {
+   const data = useLoaderData<typeof loader>();
+
    return (
       <html lang="en">
       <head>
@@ -43,7 +51,7 @@ export default function App() {
       </head>
       <body>
       <ThemeProvider theme={theme}>
-         <RootLayout>
+         <RootLayout isLoggedIn={data.isLoggedIn}>
             <Outlet />
          </RootLayout>
       </ThemeProvider>

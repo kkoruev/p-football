@@ -6,7 +6,7 @@ import styles from './header.css';
 import {useState} from "react";
 import NavigationLinks from "~/components/navigation/navigation.links";
 
-export default function Header() {
+export default function Header({isLoggedIn}) {
 
    const [isMenuOpen, setIsMenuOpen] = useState(false);
    const theme = useTheme();
@@ -31,7 +31,7 @@ export default function Header() {
 
 
                <div className="desktopOnly">
-                  <NavigationLinks></NavigationLinks>
+                  <NavigationLinks isLoggedIn={isLoggedIn}></NavigationLinks>
                </div>
                {/* Add more navigation links as needed */}
             </Toolbar>
