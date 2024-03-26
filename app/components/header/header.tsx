@@ -18,24 +18,14 @@ import styles from './header.css';
 import {useState} from "react";
 import NavigationLinks from "~/components/navigation/navigation.links";
 import MobileNavigationMenu from "~/components/navigation/mobile.navigation.menu";
+import ProfileNavigationMenu from "~/components/navigation/profile.navigation.menu";
 
 export default function Header({isLoggedIn}) {
 
    const [isMenuOpen, setIsMenuOpen] = useState(false);
-   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
-
-   const theme = useTheme();
 
    const handleMenuToggle = () => {
       setIsMenuOpen(!isMenuOpen);
-   };
-
-   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
-      setAnchorElUser(event.currentTarget);
-   };
-
-   const handleCloseUserMenu = () => {
-      setAnchorElUser(null);
    };
 
    return (
@@ -59,34 +49,7 @@ export default function Header({isLoggedIn}) {
 
                {isLoggedIn && (
                   <>
-                     <Tooltip title="Open user settings">
-                        <IconButton onClick={handleOpenUserMenu} size="large" color="inherit">
-                           <AccountCircle/>
-                        </IconButton>
-                     </Tooltip>
-                     <Menu
-                        sx={{ mt: '45px' }}
-                        anchorEl={anchorElUser}
-                        anchorOrigin={{
-                           vertical: 'top',
-                           horizontal: 'right',
-                        }}
-                        keepMounted
-                        transformOrigin={{
-                           vertical: 'top',
-                           horizontal: 'right',
-                        }}
-                        open={Boolean(anchorElUser)}
-                        onClose={handleCloseUserMenu}
-                     >
-                        <MenuItem>
-                           <Typography textAlign="center">Profile</Typography>
-                        </MenuItem>
-                        <MenuItem>
-                           <Typography textAlign="center">Log out</Typography>
-                        </MenuItem>
-
-                     </Menu>
+                     <ProfileNavigationMenu/>
                   </>
                )}
 
