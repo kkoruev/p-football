@@ -1,18 +1,41 @@
 import {Link} from "@remix-run/react";
-import {AppBar, Box, Button, IconButton, Menu, MenuItem, Slide, Toolbar, Typography, useTheme} from "@mui/material";
-import {Close, Menu as MenuIcon} from "@mui/icons-material";
+import {
+   AppBar,
+   Box,
+   Button,
+   IconButton,
+   Menu,
+   MenuItem,
+   Slide,
+   Toolbar,
+   Tooltip,
+   Typography,
+   useTheme
+} from "@mui/material";
+import {AccountCircle, Close, Menu as MenuIcon} from "@mui/icons-material";
 
 import styles from './header.css';
 import {useState} from "react";
 import NavigationLinks from "~/components/navigation/navigation.links";
+import MobileNavigationMenu from "~/components/navigation/mobile.navigation.menu";
 
 export default function Header({isLoggedIn}) {
 
    const [isMenuOpen, setIsMenuOpen] = useState(false);
+   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+
    const theme = useTheme();
 
    const handleMenuToggle = () => {
       setIsMenuOpen(!isMenuOpen);
+   };
+
+   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
+      setAnchorElUser(event.currentTarget);
+   };
+
+   const handleCloseUserMenu = () => {
+      setAnchorElUser(null);
    };
 
    return (
@@ -33,40 +56,44 @@ export default function Header({isLoggedIn}) {
                <div className="desktopOnly">
                   <NavigationLinks isLoggedIn={isLoggedIn}></NavigationLinks>
                </div>
-               {/* Add more navigation links as needed */}
+
+               {isLoggedIn && (
+                  <>
+                     <Tooltip title="Open user settings">
+                        <IconButton onClick={handleOpenUserMenu} size="large" color="inherit">
+                           <AccountCircle/>
+                        </IconButton>
+                     </Tooltip>
+                     <Menu
+                        sx={{ mt: '45px' }}
+                        anchorEl={anchorElUser}
+                        anchorOrigin={{
+                           vertical: 'top',
+                           horizontal: 'right',
+                        }}
+                        keepMounted
+                        transformOrigin={{
+                           vertical: 'top',
+                           horizontal: 'right',
+                        }}
+                        open={Boolean(anchorElUser)}
+                        onClose={handleCloseUserMenu}
+                     >
+                        <MenuItem>
+                           <Typography textAlign="center">Profile</Typography>
+                        </MenuItem>
+                        <MenuItem>
+                           <Typography textAlign="center">Log out</Typography>
+                        </MenuItem>
+
+                     </Menu>
+                  </>
+               )}
+
             </Toolbar>
          </AppBar>
-         {isMenuOpen && (
-            <Slide direction={"right"} in={isMenuOpen} mountOnEnter unmountOnExit>
-               <Box
-                  sx={{
-                     position: "fixed",
-                     top: 0,
-                     left: 0,
-                     width: "100%",
-                     height: "100vh",
-                     backgroundColor: theme.palette.primary.main,
-                     zIndex: 1300, // Ensure it's above most other elements
-                     display: "flex",
-                     flexDirection: "column",
-                     alignItems: "center",
-                     paddingTop: "64px",
-                     color: "white",
-                  }}
-                  onClick={handleMenuToggle}
-               >
-                  <IconButton
-                     color="inherit"
-                     aria-label="close menu"
-                     sx={{position: "absolute", top: 8, right: 8}}
-                  >
-                     <Close/>
-                  </IconButton>
-                  {/* Add your menu items here */}
-                  <NavigationLinks></NavigationLinks>
-               </Box>
-            </Slide>
-         )}
+
+         {isMenuOpen && (<MobileNavigationMenu isOpen={isMenuOpen} toggleMenu={handleMenuToggle}/>)}
       </header>
    );
 }
