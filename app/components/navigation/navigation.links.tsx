@@ -6,8 +6,6 @@ import {useState} from "react";
 
 export default function NavigationLinks({isLoggedIn}) {
 
-
-
    const responsiveNavigationButton = {
       '@media (max-width: 599px)': {
          marginTop: 1

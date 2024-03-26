@@ -1,10 +1,12 @@
 import {IconButton, Menu, MenuItem, Tooltip, Typography} from "@mui/material";
 import {AccountCircle} from "@mui/icons-material";
 import {useState} from "react";
+import {useFetcher} from "@remix-run/react";
 
 export default function ProfileNavigationMenu() {
 
    const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+   const fetcher = useFetcher();
 
    const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
       setAnchorElUser(event.currentTarget);
@@ -13,6 +15,11 @@ export default function ProfileNavigationMenu() {
    const handleCloseUserMenu = () => {
       setAnchorElUser(null);
    };
+
+   const handleLogout = () => {
+      fetcher.submit({}, {action: "/logout", method: "post"});
+      handleCloseUserMenu();
+   }
 
    return (
       <>
@@ -39,7 +46,7 @@ export default function ProfileNavigationMenu() {
             <MenuItem>
                <Typography textAlign="center">Profile</Typography>
             </MenuItem>
-            <MenuItem>
+            <MenuItem onClick={handleLogout}>
                <Typography textAlign="center">Log out</Typography>
             </MenuItem>
 
