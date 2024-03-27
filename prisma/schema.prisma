@@ -8,23 +8,34 @@ datasource db {
 }
 
 model User {
-    id          Int     @id @default(autoincrement())
-    name        String
-    email       String  @unique
-    city        String
-    sportType   String
-    position    String
-    age         Int
-    skillLevel  String
-    fbProfile   FbProfile?
+  id         Int        @id @default(autoincrement())
+  name       String
+  email      String     @unique
+  city       String
+  sportType  String
+  position   String
+  age        Int
+  skillLevel String
+  fbProfile  FbProfile?
+  Event      Event[]
 }
 
 model FbProfile {
-    id          Int     @id @default(autoincrement())
-    fbId        String  @unique
-    user        User    @relation(fields: [userId], references: [id])
-    userId      Int     @unique
+  id     Int    @id @default(autoincrement())
+  fbId   String @unique
+  user   User   @relation(fields: [userId], references: [id])
+  userId Int    @unique
 }
 
-
-
+model Event {
+  id                 Int      @id @default(autoincrement())
+  name               String
+  date               DateTime
+  duration           Int
+  numberOfPlayers    Int
+  description        String
+  backgroundImageUrl String
+  private            Boolean
+  createdBy          User     @relation(fields: [userId], references: [id])
+  userId             Int
+}

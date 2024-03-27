@@ -31,7 +31,7 @@ export default function EventOverview({invitation, imageUrl}: {
             justifyContent: 'space-between',
             gap: 2
          }}>
-            <Typography variant="h4">{invitation.eventName}</Typography>
+            <Typography variant="h4">{invitation.name}</Typography>
             <Box sx={{display: 'flex', gap: 1, alignItems: 'center'}}>
                <CalendarTodayRounded/>
                <Typography variant="body1">{`${invitation.date}`}</Typography>

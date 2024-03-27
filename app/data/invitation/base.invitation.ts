@@ -1,9 +1,6 @@
 
 export interface BaseInvitation {
-   id: number;
-   eventName: string;
+   name: string;
    location: string;
    numberOfPlayers: number;
-   date: string;
-   time: string;
 }

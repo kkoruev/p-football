@@ -1,4 +1,4 @@
-import {CreateInvitation} from "~/data/invitation/create.invitation";
+import {CreateInvitationDb} from "~/data/invitation/create.invitation.db";
 import {useState} from "react";
 import {
    Box,
@@ -13,28 +13,28 @@ import {
    Typography
 } from "@mui/material";
 import {redirect} from "@remix-run/node";
-import {delay} from "~/utils/utils";
-import {addInvitation} from "~/database/inMemoryInvitations";
-import {ExpandedInvitation} from "~/data/invitation/expanded.invitation";
+import EventRepository from "~/repository/event.repository";
+import {CreateInvitationUi} from "~/data/invitation/create.invitation.ui";
 
 
 export async function action({request}) {
    const formData = await request.formData();
-   const invitation: CreateInvitation = {
-      id: 3,
-      eventName: formData.get("eventName")?.toString() || "",
+   const date = formData.get("date")?.toString() || "";
+   const time = formData.get("time")?.toString() || "";
+   const dateTime = `${date}T${time}`;
+   const invitation: CreateInvitationDb = {
+      name: formData.get("eventName")?.toString() || "",
       location: formData.get("location")?.toString() || "",
-      date: formData.get("date")?.toString() || "",
-      time: formData.get("time")?.toString() || "",
+      dateTime: new Date(dateTime),
       duration: parseInt(formData.get("duration")?.toString() || "0", 10),
       numberOfPlayers: parseInt(formData.get("numberOfPlayers")?.toString() || "0", 10),
       description: formData.get("description")?.toString() || "",
-      backgroundImage: formData.get("backgroundImage")?.toString() || ""
+      backgroundImage: formData.get("backgroundImage")?.toString() || "",
+      private: true
    };
 
-   addInvitation({...invitation, currentNumberOfPlayers: 0, participants: []} as ExpandedInvitation);
+   await EventRepository.createEvent(invitation);
 
-   await delay(2000);
    return redirect('/invitations');
 }
 
@@ -45,19 +45,19 @@ export default function CreateInvitationsPage() {
          label: 'Default',
          value: 'https://images.expertreviews.co.uk/wp-content/uploads/2023/09/best-football-lead-scaled.jpg?width=626&height=352&fit=crop&format=webply'
       },
-      {label: 'Specific', value: 'https://shorturl.at/kmtvG'},
+      {label: 'Specific', value: 'https://img.freepik.com/free-photo/soccer-into-goal-success-concept_1150-5274.jpg?size=626&ext=jpg&ga=GA1.1.1700460183.1709510400&semt=ais'},
    ];
 
-   const [invitation, setInvitation] = useState<CreateInvitation>({
-      id: 0,
-      eventName: '',
+   const [invitation, setInvitation] = useState<CreateInvitationUi>({
+      name: '',
       location: '',
       date: '',
       time: '',
       duration: 0,
       numberOfPlayers: 0,
       description: '',
-      backgroundImage: backgroundImageOptions[0].value // Default to the first image as an example
+      backgroundImage: backgroundImageOptions[0].value, // Default to the first image as an example
+      private: true
    });
 
    const handleChange = (e) => {
@@ -70,15 +70,15 @@ export default function CreateInvitationsPage() {
 
    return (
       <Container maxWidth="md">
-         <Box component="form" method="post" noValidate sx={{mt: 1}}>
+         <Box component="form" method="post" sx={{mt: 1}}>
             <Typography variant="h5" sx={{ mb: 1, textAlign: 'center' }}>Create New Event</Typography>
             <TextField
                margin="normal"
                required
                fullWidth
                label="Event Name"
-               name="eventName"
-               value={invitation.eventName}
+               name="name"
+               value={invitation.name}
                onChange={handleChange}
             />
             <TextField

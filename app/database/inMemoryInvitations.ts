@@ -3,7 +3,7 @@ import {ExpandedInvitation} from "~/data/invitation/expanded.invitation";
 let invitations: ExpandedInvitation[] = [
    {
       id: 1,
-      eventName: 'Футбол Вторник ||',
+      name: 'Футбол Вторник ||',
       location: 'City Park',
       date: '15-02-2024',
       time: '20:30',
@@ -38,7 +38,7 @@ let invitations: ExpandedInvitation[] = [
    },
    {
       id: 2,
-      eventName: 'Футбол Вторник ||',
+      name: 'Футбол Вторник ||',
       location: 'City Park',
       date: '25-02-2024',
       time: '20:30',
