@@ -15,21 +15,24 @@ import {
 import {redirect} from "@remix-run/node";
 import EventRepository from "~/repository/event.repository";
 import {CreateInvitationUi} from "~/data/invitation/create.invitation.ui";
+import {getProfileSession} from "~/sessions/profile.session";
 
 
 export async function action({request}) {
+   const profileSession = await getProfileSession(request.headers.get("Cookie"));
+
    const formData = await request.formData();
    const date = formData.get("date")?.toString() || "";
    const time = formData.get("time")?.toString() || "";
    const dateTime = `${date}T${time}`;
    const invitation: CreateInvitationDb = {
-      name: formData.get("eventName")?.toString() || "",
+      name: formData.get("name")?.toString() || "",
       location: formData.get("location")?.toString() || "",
-      dateTime: new Date(dateTime),
+      date: new Date(dateTime),
       duration: parseInt(formData.get("duration")?.toString() || "0", 10),
       numberOfPlayers: parseInt(formData.get("numberOfPlayers")?.toString() || "0", 10),
       description: formData.get("description")?.toString() || "",
-      backgroundImage: formData.get("backgroundImage")?.toString() || "",
+      backgroundImageUrl: formData.get("backgroundImageUrl")?.toString() || "",
       private: true
    };
 
@@ -56,7 +59,7 @@ export default function CreateInvitationsPage() {
       duration: 0,
       numberOfPlayers: 0,
       description: '',
-      backgroundImage: backgroundImageOptions[0].value, // Default to the first image as an example
+      backgroundImageUrl: backgroundImageOptions[0].value, // Default to the first image as an example
       private: true
    });
 
@@ -147,9 +150,9 @@ export default function CreateInvitationsPage() {
                <InputLabel id="background-image-select-label">Background Image</InputLabel>
                <Select
                   labelId="background-image-select-label"
-                  id="backgroundImage"
-                  name="backgroundImage"
-                  value={invitation.backgroundImage}
+                  id="backgroundImageUrl"
+                  name="backgroundImageUrl"
+                  value={invitation.backgroundImageUrl}
                   label="Background Image"
                   onChange={handleChange}
                >
@@ -164,7 +167,7 @@ export default function CreateInvitationsPage() {
                <Card>
                   <CardMedia
                      component="img"
-                     image={invitation.backgroundImage}
+                     image={invitation.backgroundImageUrl}
                      alt="Selected background"
                      sx={{ width: 256, height: 144, objectFit: 'cover' }}
                   />

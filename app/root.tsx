@@ -33,7 +33,6 @@ function createFacebookSDKScript() {
 export async function loader({request}) {
    const profileSession = await getProfileSession(request.headers.get("Cookie"));
 
-   console.log(profileSession.get("name"));
    const isLoggedIn = profileSession.has("name");
    return json({isLoggedIn});
 }
