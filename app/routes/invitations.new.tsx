@@ -16,10 +16,14 @@ import {redirect} from "@remix-run/node";
 import EventRepository from "~/repository/event.repository";
 import {CreateInvitationUi} from "~/data/invitation/create.invitation.ui";
 import {getProfileSession} from "~/sessions/profile.session";
+import {getCurrentUserId} from "~/utils/session.util";
 
 
 export async function action({request}) {
-   const profileSession = await getProfileSession(request.headers.get("Cookie"));
+   const userId: number = await getCurrentUserId(request);
+   if (!userId) {
+      return redirect("/");
+   }
 
    const formData = await request.formData();
    const date = formData.get("date")?.toString() || "";
@@ -36,7 +40,7 @@ export async function action({request}) {
       private: true
    };
 
-   await EventRepository.createEvent(invitation);
+   await EventRepository.createEvent(invitation, userId);
 
    return redirect('/invitations');
 }

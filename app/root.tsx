@@ -8,6 +8,7 @@ import {links as headerStyles} from '~/components/header/header'
 import RootLayout from "~/components/root/root.layout";
 import {json} from "@remix-run/node";
 import {getProfileSession} from "~/sessions/profile.session";
+import {isLoggedIn, isUserLoggedIn} from "~/utils/session.util";
 
 function createFacebookSDKScript() {
    return `
@@ -31,9 +32,7 @@ function createFacebookSDKScript() {
 }
 
 export async function loader({request}) {
-   const profileSession = await getProfileSession(request.headers.get("Cookie"));
-
-   const isLoggedIn = profileSession.has("name");
+   const isLoggedIn: boolean = await isUserLoggedIn(request);
    return json({isLoggedIn});
 }
 
