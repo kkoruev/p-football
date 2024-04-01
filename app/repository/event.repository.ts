@@ -7,7 +7,14 @@ export default class EventRepository {
    static async createEvent(event: CreateInvitationDb, userId: number) {
       return await prisma.event.create(
          {
-            data:{...event}
+            data: {
+               ...event,
+               createdBy: {
+                  connect: {
+                     id: userId
+                  }
+               }
+            }
          }
       );
    }

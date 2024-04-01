@@ -37,7 +37,7 @@ export async function action({request}) {
       numberOfPlayers: parseInt(formData.get("numberOfPlayers")?.toString() || "0", 10),
       description: formData.get("description")?.toString() || "",
       backgroundImageUrl: formData.get("backgroundImageUrl")?.toString() || "",
-      private: true
+      private: false
    };
 
    await EventRepository.createEvent(invitation, userId);
