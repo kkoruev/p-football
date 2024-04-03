@@ -58,6 +58,8 @@ export default function CreateInvitationsPage() {
    const [invitation, setInvitation] = useState<CreateInvitationUi>({
       name: '',
       location: '',
+      googleMapsLink: '',
+      city: '',
       date: '',
       time: '',
       duration: 0,
@@ -95,6 +97,15 @@ export default function CreateInvitationsPage() {
                label="Location"
                name="location"
                value={invitation.location}
+               onChange={handleChange}
+            />
+            <TextField
+               margin="normal"
+               required
+               fullWidth
+               label="Google Maps Link"
+               name="googleMapsLink"
+               value={invitation.googleMapsLink}
                onChange={handleChange}
             />
             <TextField

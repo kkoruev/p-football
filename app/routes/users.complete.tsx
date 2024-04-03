@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import { Box, Button, Container, FormControl, InputLabel, MenuItem, Select, TextField, Typography } from '@mui/material';
-import {FbProfile, SessionUser, User} from "~/data/user";
+import {City, FbProfile, SessionUser, User} from "~/data/user";
 import {json, redirect} from "@remix-run/node";
 import {FbUserRepository} from "~/repository/fb.user.repository";
 import {useActionData, useLoaderData} from "@remix-run/react";
@@ -166,9 +166,9 @@ export default function CompleteProfilePage() {
                      value={user.city}
                      onChange={handleChange}
                   >
-                     <MenuItem value="Sofia">Sofia</MenuItem>
-                     <MenuItem value="Plovdiv">Plovdiv</MenuItem>
-                     <MenuItem value="Varna">Varna</MenuItem>
+                     <MenuItem value={City.SOFIA}>{City.SOFIA}</MenuItem>
+                     <MenuItem value={City.PLOVDIV}>{City.PLOVDIV}</MenuItem>
+                     <MenuItem value={City.VARNA}>{City.VARNA}</MenuItem>
                   </Select>
                </FormControl>
                <FormControl fullWidth margin="normal">
