@@ -8,13 +8,14 @@ import invitationStyles from '~/styles/invitationsPage.css'
 import {getInvitations, updateInvitation} from "~/database/inMemoryInvitations";
 import {delay} from "~/utils/utils";
 import {ExpandedInvitation} from "~/data/invitation/expanded.invitation";
+import EventRepository from "~/repository/event.repository";
 
 export async function loader({request}) {
    const url = new URL(request.url);
    const actionResult = url.searchParams.get('actionResult');
    const invitationId = url.searchParams.get('id');
 
-   const invitations = getInvitations();
+   const invitations = await EventRepository.getEvents();
    return json({invitations, actionResult, invitationId});
 }
 

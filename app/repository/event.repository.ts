@@ -18,4 +18,8 @@ export default class EventRepository {
          }
       );
    }
+
+   static async getEvents() {
+      return await prisma.event.findMany({});
+   }
 }
