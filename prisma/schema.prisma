@@ -40,3 +40,22 @@ model Event {
   createdBy          User     @relation(fields: [userId], references: [id])
   userId             Int
 }
+
+enum ParticipationStatus {
+  ATTENDING
+  INTERESTED
+  DECLINED
+}
+
+model EventParticipation {
+  id        Int    @id @default(autoincrement())
+  event     Event  @relation(fields: [eventId], references: [id])
+  eventId   Int
+  user      User   @relation(fields: [userId], references: [id])
+  userId    Int
+  status    ParticipationStatus
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([eventId, userId])
+}
