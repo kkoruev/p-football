@@ -9,13 +9,27 @@ import {getInvitations, updateInvitation} from "~/database/inMemoryInvitations";
 import {delay} from "~/utils/utils";
 import {ExpandedInvitation} from "~/data/invitation/expanded.invitation";
 import EventRepository from "~/repository/event.repository";
+import {EventInvitationDb} from "~/data/invitation/event.invitation.db";
+import {fromInvitationDbToExpandedInvitation} from "~/utils/invitation.adapter.util";
+import {getCurrentUserId} from "~/utils/session.util";
+
+interface InvitationsLoaderData {
+   invitations: EventInvitationDb[],
+   actionResult: string,
+   invitationId: string
+}
 
 export async function loader({request}) {
+   const userId: number = await getCurrentUserId(request);
+   if (!userId) {
+      return redirect("/");
+   }
+
    const url = new URL(request.url);
    const actionResult = url.searchParams.get('actionResult');
    const invitationId = url.searchParams.get('id');
 
-   const invitations = await EventRepository.getEvents();
+   const invitations: EventInvitationDb[] = await EventRepository.getEvents();
    return json({invitations, actionResult, invitationId});
 }
 
@@ -51,7 +65,7 @@ export async function action({ request }) {
 }
 
 export default function InvitationsPage() {
-   const { invitations, actionResult, invitationId } = useLoaderData<typeof loader>();
+   const { invitations , actionResult, invitationId } = useLoaderData<InvitationsLoaderData>();
 
    return (
       <Container sx={{bgcolor: 'background.default'}}  className="invitations-container">
@@ -65,7 +79,9 @@ export default function InvitationsPage() {
             )}
 
             { invitations.length && (
-               invitations.map((invitation: ExpandedInvitation) => (
+               invitations
+                  .map((invitation: EventInvitationDb) => fromInvitationDbToExpandedInvitation(invitation))
+                  .map((invitation: ExpandedInvitation) => (
                   <InvitationEntryCard key={invitation.id} invitation={invitation}
                                        isLoading="false" actionResult={invitation.id.toString() === invitationId ? actionResult : null}>
                   </InvitationEntryCard>

@@ -1,5 +1,5 @@
 import {CreateInvitationDb} from "~/data/invitation/create.invitation.db";
-import {useState} from "react";
+import React, {useState} from "react";
 import {
    Box,
    Button, Card, CardMedia,
@@ -17,7 +17,16 @@ import EventRepository from "~/repository/event.repository";
 import {CreateInvitationUi} from "~/data/invitation/create.invitation.ui";
 import {getProfileSession} from "~/sessions/profile.session";
 import {getCurrentUserId} from "~/utils/session.util";
+import {City} from "~/data/user";
 
+
+export async function loader({request}) {
+   const userId: number = await getCurrentUserId(request);
+   if (!userId) {
+      return redirect("/");
+   }
+   return null;
+}
 
 export async function action({request}) {
    const userId: number = await getCurrentUserId(request);
@@ -32,7 +41,9 @@ export async function action({request}) {
    const invitation: CreateInvitationDb = {
       name: formData.get("name")?.toString() || "",
       location: formData.get("location")?.toString() || "",
-      date: new Date(dateTime),
+      googleMapsLink: formData.get("googleMapsLink")?.toString() || "",
+      city: formData.get("city")?.toString() || City.SOFIA,
+      dateTime: new Date(dateTime),
       duration: parseInt(formData.get("duration")?.toString() || "0", 10),
       numberOfPlayers: parseInt(formData.get("numberOfPlayers")?.toString() || "0", 10),
       description: formData.get("description")?.toString() || "",
@@ -99,6 +110,22 @@ export default function CreateInvitationsPage() {
                value={invitation.location}
                onChange={handleChange}
             />
+            <FormControl fullWidth margin="normal">
+               <InputLabel id="city-label">City</InputLabel>
+               <Select
+                  labelId="city-label"
+                  id="city"
+                  required
+                  name="city"
+                  label="City"
+                  defaultValue="Sofia"
+                  onChange={handleChange}
+               >
+                  <MenuItem value={City.SOFIA}>{City.SOFIA}</MenuItem>
+                  <MenuItem value={City.PLOVDIV}>{City.PLOVDIV}</MenuItem>
+                  <MenuItem value={City.VARNA}>{City.VARNA}</MenuItem>
+               </Select>
+            </FormControl>
             <TextField
                margin="normal"
                required

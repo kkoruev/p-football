@@ -75,7 +75,7 @@ export default function CompleteProfilePage() {
 
    // check how to store the fbId here to save it in the DB.
    const [user, setUser] = useState<User>({
-       age: "", email: sessionUser.email || "", name: actionData?.values?.name || sessionUser.name || "", skillLevel: "Beginner", sportType: "Football", position: 'GK', fbId: sessionUser.fbId
+       age: "", email: sessionUser.email || actionData?.values?.email || "", name: actionData?.values?.name || sessionUser.name || "", skillLevel: "Beginner", sportType: "Football", position: 'GK', fbId: sessionUser.fbId
    } as User);
 
    const [clientErrors, setClientErrors] = useState({});
@@ -90,7 +90,6 @@ export default function CompleteProfilePage() {
    const handleChange = (e) => {
       const {name, value} = e.target;
       const newUser: User = { ...user, [name]: value };
-
       setClientErrors(validateUser(newUser));
 
       setUser(prevState => ({
@@ -140,7 +139,7 @@ export default function CompleteProfilePage() {
                   value={user.email}
                   error={!!getEmailErrors()}
                   helperText={getEmailErrors()}
-                  disabled="true"
+                  onChange={handleChange}
                />
                <TextField
                   margin="normal"
@@ -161,7 +160,7 @@ export default function CompleteProfilePage() {
                      id="city"
                      required
                      name="city"
-                     label="Position"
+                     label="City"
                      defaultValue="Sofia"
                      value={user.city}
                      onChange={handleChange}

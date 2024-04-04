@@ -12,9 +12,9 @@ export interface User {
 export const cities: string[] = ["Sofia", "Plovdiv", "Varna"];
 
 export enum City {
-   SOFIA = 'Sofia',
-   PLOVDIV = 'Plovdiv',
-   VARNA = 'Varna'
+   SOFIA = 'София',
+   PLOVDIV = 'Пловдив',
+   VARNA = 'Варна'
 }
 
 export interface SessionUser {

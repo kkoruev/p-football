@@ -30,13 +30,14 @@ export default function InvitationEntryCard({invitation, actionResult}: {
          <Card className="invitation-card" variant="outlined">
             <Link to={`/invitations/${invitation.id}`} reloadDocument className='link-inherit'>
                <CardActionArea>
-                  <CardHeader title={invitation.name} subheader={invitation.location} className="card-header">
+                  <CardHeader title={invitation.name} subheader={`${invitation.location}, ${invitation.city}`} className="card-header">
                   </CardHeader>
                   <CardContent className="card-content">
                      <Typography variant="body2">Max Players: {invitation.numberOfPlayers}</Typography>
-                     <Typography variant="body2">Current Players: {invitation.currentNumberOfPlayers}</Typography>
+                     <Typography variant="body2">Current Players: {invitation.currentNumberOfPlayers ?? 0}</Typography>
                      <Typography variant="body2">Date: {invitation.date}</Typography>
                      <Typography variant="body2">Time: {invitation.time}</Typography>
+                     <Typography variant="body2">Duration: {invitation.duration} minutes</Typography>
                   </CardContent>
                </CardActionArea>
             </Link>

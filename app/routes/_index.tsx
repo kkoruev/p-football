@@ -54,6 +54,7 @@ export default function HomePage() {
             if (response.authResponse) {
                console.log('Welcome! Fetching your information.... ');
                FB.api('/me', {fields: 'name_format,short_name,name,email,picture'}, async function (response) {
+                  console.log(response);
                   const sessionUser: SessionUser = {name: response.name, email: response.email, fbId: response.id};
                   fetcher.submit({...sessionUser}, {method: 'post', encType: "application/json"});
                });
