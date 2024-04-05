@@ -7,5 +7,8 @@ export interface EventInvitationDb extends BaseInvitation {
    description: string,
    backgroundImageUrl: string,
    private: boolean,
-   userId: number
+   userId: number,
+   createdBy: {
+      name: string
+   }
 }

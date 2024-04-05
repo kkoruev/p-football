@@ -7,5 +7,5 @@ export function fromInvitationDbToExpandedInvitation(invitationDb: EventInvitati
    const datePart = dateObj.toISOString().split('T')[0];
    const timePart = dateObj.toTimeString().split(' ')[0].substring(0, 5);
 
-   return {...invitationDb, date: datePart, time: timePart} as ExpandedInvitation;
+   return {...invitationDb, date: datePart, time: timePart, participants: [], hostName: invitationDb.createdBy?.name} as ExpandedInvitation;
 }

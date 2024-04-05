@@ -12,23 +12,21 @@ import EventDescription from "~/components/event/EventDescription";
 import GuestList from "~/components/event/GuestList";
 import GuestListExpanded from "~/components/event/GuestListExpanded";
 import {findById} from "~/database/inMemoryInvitations";
+import EventRepository from "~/repository/event.repository";
+import {fromInvitationDbToExpandedInvitation} from "~/utils/invitation.adapter.util";
 
 export async function loader({params}) {
    const {invitationId} = params;
-   // this should be call to db to get the ListInvitation
-   // adding delay for the call
-   await delay(1000);
-   const invitation = findById(invitationId);
+   const invitation = await EventRepository.getEvent(parseInt(invitationId));
 
-   return invitation;
+   const exp =  fromInvitationDbToExpandedInvitation(invitation);
+   console.log(exp);
+   return exp;
 }
 
 
 export default function Invitation() {
    const invitation: ExpandedInvitation = useLoaderData<typeof loader>();
-
-   const imageUrl = 'https://images.expertreviews.co.uk/wp-content/uploads/2023/09/best-football-lead-scaled.jpg?width=626&height=352&fit=crop&format=webply';
-   const imageUrl2 = 'https://shorturl.at/kmtvG';
 
    const [modalOpen, setModalOpen] = useState(false);
    const handleOpenModal = () => setModalOpen(true);
@@ -41,7 +39,7 @@ export default function Invitation() {
 
                {/* Card 1: Event Information */}
                <Grid item xs={12} sx={{display: 'flex'}}>
-                  <EventOverview invitation={invitation} imageUrl={imageUrl2}/>
+                  <EventOverview invitation={invitation} imageUrl={invitation.backgroundImageUrl}/>
                </Grid>
 
                {/* Card 2: Event Description and Details */}

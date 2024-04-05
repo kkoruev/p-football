@@ -13,4 +13,5 @@ export interface ExpandedInvitation extends BaseInvitation {
    eventStatus: 'Upcoming' | 'Ongoing' | 'Completed' | 'Cancelled';
    participants: Participant[];
    currentUserStatus: 'Accepted' | 'Rejected' | 'Maybe' | 'None';
+   backgroundImageUrl: string;
 }

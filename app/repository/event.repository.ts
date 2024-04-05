@@ -20,6 +20,17 @@ export default class EventRepository {
       );
    }
 
+   static async getEvent(eventId: number) {
+      return await prisma.event.findUnique({
+         where: {
+            id: eventId
+         },
+         include: {
+            createdBy: true
+         }
+      });
+   }
+
    static async getEvents(skip: number, take: number): Promise<EventInvitationDb[]> {
       return await prisma.event.findMany({
          skip,
