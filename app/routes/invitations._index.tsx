@@ -1,8 +1,10 @@
-import { useLoaderData } from "@remix-run/react";
+import {useLoaderData, useNavigate} from "@remix-run/react";
 import {json} from "@remix-run/node";
-import { redirect } from '@remix-run/node';
-import {Box, Container, Typography} from "@mui/material";
-import InvitationEntryCard, {links as invitationEntryCardLinks} from "~/components/invitation-entry-card/InvitationEntryCard";
+import {redirect} from '@remix-run/node';
+import {Box, Container, Pagination, Typography} from "@mui/material";
+import InvitationEntryCard, {
+   links as invitationEntryCardLinks
+} from "~/components/invitation-entry-card/InvitationEntryCard";
 
 import invitationStyles from '~/styles/invitationsPage.css'
 import {getInvitations, updateInvitation} from "~/database/inMemoryInvitations";
@@ -16,7 +18,9 @@ import {getCurrentUserId} from "~/utils/session.util";
 interface InvitationsLoaderData {
    invitations: EventInvitationDb[],
    actionResult: string,
-   invitationId: string
+   invitationId: string,
+   page: number,
+   totalPages: number
 }
 
 export async function loader({request}) {
@@ -28,12 +32,21 @@ export async function loader({request}) {
    const url = new URL(request.url);
    const actionResult = url.searchParams.get('actionResult');
    const invitationId = url.searchParams.get('id');
+   const page = parseInt(url.searchParams.get('page') || '1', 10);
+   const limit = 3;
+   const skip = (page - 1) * limit;
 
-   const invitations: EventInvitationDb[] = await EventRepository.getEvents();
-   return json({invitations, actionResult, invitationId});
+   const [invitations, total] = await Promise.all([
+      EventRepository.getEvents(skip, limit),
+      EventRepository.countEvents()
+   ]);
+
+   const totalPages = Math.ceil(total / limit);
+
+   return json({invitations, actionResult, invitationId, page, totalPages});
 }
 
-export async function action({ request }) {
+export async function action({request}) {
    const formData = await request.formData();
    const action = formData.get("action");
    const invitationId = Number(formData.get('invitationId'));
@@ -65,16 +78,21 @@ export async function action({ request }) {
 }
 
 export default function InvitationsPage() {
-   const { invitations , actionResult, invitationId } = useLoaderData<InvitationsLoaderData>();
+   const navigate = useNavigate();
+   const {invitations, actionResult, invitationId, page, totalPages} = useLoaderData<InvitationsLoaderData>();
+
+   const handlePageChange = (event, value: number) => {
+      navigate(`/invitations?page=${value}`);
+   };
 
    return (
-      <Container sx={{bgcolor: 'background.default'}}  className="invitations-container">
+      <Container sx={{bgcolor: 'background.default'}} className="invitations-container">
          <Typography variant="h4" gutterBottom className="header-text">
             My Invitations
          </Typography>
 
          <Box className="invitation-card-container">
-            { !invitations.length && (
+            {!invitations.length && (
                <Typography variant="body1">You have no upcoming invitations. Join a football event now!</Typography>
             )}
 
@@ -86,6 +104,11 @@ export default function InvitationsPage() {
                                        isLoading="false" actionResult={invitation.id.toString() === invitationId ? actionResult : null}>
                   </InvitationEntryCard>
                ))
+            )}
+            {totalPages > 0 && (
+               <Box sx={{ display: 'flex', justifyContent: 'center', my: 2 }}>
+                  <Pagination count={totalPages} page={page} onChange={handlePageChange} />
+               </Box>
             )}
          </Box>
       </Container>

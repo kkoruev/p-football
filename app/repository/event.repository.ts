@@ -20,8 +20,14 @@ export default class EventRepository {
       );
    }
 
-   static async getEvents(): Promise<EventInvitationDb[]> {
+   static async getEvents(skip: number, take: number): Promise<EventInvitationDb[]> {
       return await prisma.event.findMany({
+         skip,
+         take
       });
+   }
+
+   static async countEvents() {
+      return await prisma.event.count();
    }
 }
