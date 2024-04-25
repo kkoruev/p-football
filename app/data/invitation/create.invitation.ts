@@ -1,4 +1,5 @@
 import {BaseInvitation} from "~/data/invitation/base.invitation";
+import {RepetitionFrequency} from "~/data/invitation/create.invitation.db";
 
 
 export interface CreateInvitation extends BaseInvitation {
@@ -6,4 +7,6 @@ export interface CreateInvitation extends BaseInvitation {
    description: string;
    backgroundImageUrl: string;
    private: boolean;
+   repeatFrequency: RepetitionFrequency;
+   repeatCount: number;
 }

@@ -1,8 +1,10 @@
-import {CreateInvitationDb} from "~/data/invitation/create.invitation.db";
+import {CreateInvitationDb, RepetitionFrequency} from "~/data/invitation/create.invitation.db";
 import React, {useState} from "react";
 import {
    Box,
-   Button, Card, CardMedia,
+   Button,
+   Card,
+   CardMedia,
    Container,
    FormControl,
    Grid,
@@ -15,10 +17,10 @@ import {
 import {redirect} from "@remix-run/node";
 import EventRepository from "~/repository/event.repository";
 import {CreateInvitationUi} from "~/data/invitation/create.invitation.ui";
-import {getProfileSession} from "~/sessions/profile.session";
 import {getCurrentUserId} from "~/utils/session.util";
 import {City} from "~/data/user";
 
+const MAX_NUMBER_OF_EVENTS: number = 30;
 
 export async function loader({request}) {
    const userId: number = await getCurrentUserId(request);
@@ -44,6 +46,8 @@ export async function action({request}) {
       googleMapsLink: formData.get("googleMapsLink")?.toString() || "",
       city: formData.get("city")?.toString() || City.SOFIA,
       dateTime: new Date(dateTime),
+      repeatFrequency: formData.get("repeatFrequency")?.toString() || RepetitionFrequency.NONE,
+      repeatCount: parseInt(formData.get("repeatCount")?.toString() || "0", 10),
       duration: parseInt(formData.get("duration")?.toString() || "0", 10),
       numberOfPlayers: parseInt(formData.get("numberOfPlayers")?.toString() || "0", 10),
       description: formData.get("description")?.toString() || "",
@@ -73,6 +77,8 @@ export default function CreateInvitationsPage() {
       city: '',
       date: '',
       time: '',
+      repeatCount: 0,
+      repeatFrequency: RepetitionFrequency.NONE,
       duration: 0,
       numberOfPlayers: 0,
       description: '',
@@ -157,6 +163,34 @@ export default function CreateInvitationsPage() {
                value={invitation.time}
                onChange={handleChange}
             />
+            <FormControl fullWidth margin="normal">
+               <InputLabel id="repeat-frequency-label">Repeat Frequency</InputLabel>
+               <Select
+                  labelId="repeat-frequency-label"
+                  id="repeatFrequency"
+                  name="repeatFrequency"
+                  value={invitation.repeatFrequency || RepetitionFrequency.NONE}
+                  label="Repeat Frequency"
+                  onChange={handleChange}
+               >
+                  <MenuItem value={RepetitionFrequency.NONE}>{RepetitionFrequency.NONE}</MenuItem>
+                  <MenuItem value={RepetitionFrequency.WEEKLY}>{RepetitionFrequency.WEEKLY}</MenuItem>
+                  <MenuItem value={RepetitionFrequency.MONTHLY}>{RepetitionFrequency.MONTHLY}</MenuItem>
+               </Select>
+            </FormControl>
+            {invitation.repeatFrequency && invitation.repeatFrequency !== RepetitionFrequency.NONE && (
+               <TextField
+                  margin="normal"
+                  fullWidth
+                  required
+                  type="number"
+                  label="Number of Occurrences"
+                  name="repeatCount"
+                  InputLabelProps={{ shrink: true }}
+                  value={invitation.repeatCount}
+                  onChange={handleChange}
+               />
+            )}
             <TextField
                margin="normal"
                required
