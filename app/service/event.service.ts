@@ -7,12 +7,12 @@ export class EventService {
 
    public static async createRepetitiveEvents(event: CreateInvitationDb, repeatFrequency: RepetitionFrequency, repeatCount: number, userId: number) {
       try {
-         console.log("Creation of repetitive events - START");
+         console.log("Creation of repetitive events - START " + new Date());
          const events = EventService.createEventsWithCorrectDates(event, repeatFrequency, repeatCount, userId);
          await prisma.event.createMany({
             data: events
          });
-         console.log("Creation of repetitive events - END");
+         console.log("Creation of repetitive events - END " + new Date());
       } catch (error) {
          console.log(error);
       }

@@ -1,7 +1,18 @@
 import {useLoaderData, useNavigate} from "@remix-run/react";
 import {json} from "@remix-run/node";
 import {redirect} from '@remix-run/node';
-import {Box, Container, Pagination, Typography} from "@mui/material";
+import {
+   AppBar,
+   Box,
+   Button,
+   Checkbox,
+   Container,
+   Drawer, Fab,
+   FormControlLabel, IconButton,
+   Pagination,
+   TextField, Toolbar,
+   Typography
+} from "@mui/material";
 import InvitationEntryCard, {
    links as invitationEntryCardLinks
 } from "~/components/invitation-entry-card/InvitationEntryCard";
@@ -14,6 +25,7 @@ import EventRepository from "~/repository/event.repository";
 import {EventInvitationDb} from "~/data/invitation/event.invitation.db";
 import {fromInvitationDbToExpandedInvitation} from "~/utils/invitation.adapter.util";
 import {getCurrentUserId} from "~/utils/session.util";
+import {Add, Menu} from "@mui/icons-material";
 
 interface InvitationsLoaderData {
    invitations: EventInvitationDb[],
@@ -87,9 +99,6 @@ export default function InvitationsPage() {
 
    return (
       <Container sx={{bgcolor: 'background.default'}} className="invitations-container">
-         <Typography variant="h4" gutterBottom className="header-text">
-            My Invitations
-         </Typography>
 
          <Box className="invitation-card-container">
             {!invitations.length && (
