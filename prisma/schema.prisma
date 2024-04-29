@@ -28,13 +28,6 @@ model FbProfile {
   userId Int    @unique
 }
 
-enum RepetitionFrequency {
-    DAILY
-    WEEKLY
-    MONTHLY
-    NONE
-}
-
 model Event {
   id                 Int                  @id @default(autoincrement())
   name               String
@@ -50,14 +43,7 @@ model Event {
   createdBy          User                 @relation(fields: [userId], references: [id])
   userId             Int
   EventParticipation EventParticipation[]
-  repeatFrequency    RepetitionFrequency
-  repeatUntil        DateTime?
-}
-
-enum ParticipationStatus {
-  ATTENDING
-  INTERESTED
-  DECLINED
+  seriesId           String?              @db.Uuid
 }
 
 model EventParticipation {
@@ -66,7 +52,7 @@ model EventParticipation {
   eventId   Int
   user      User                @relation(fields: [userId], references: [id])
   userId    Int
-  status    ParticipationStatus
+  status    String
   createdAt DateTime            @default(now())
   updatedAt DateTime            @updatedAt
 

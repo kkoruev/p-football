@@ -7,6 +7,4 @@ export interface CreateInvitation extends BaseInvitation {
    description: string;
    backgroundImageUrl: string;
    private: boolean;
-   repeatFrequency: RepetitionFrequency;
-   repeatCount: number;
 }

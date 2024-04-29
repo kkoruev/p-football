@@ -1,4 +1,4 @@
-import {CreateInvitationDb, RepetitionFrequency} from "~/data/invitation/create.invitation.db";
+import {CreateInvitationDb} from "~/data/invitation/create.invitation.db";
 import React, {useState} from "react";
 import {
    Box,
@@ -16,11 +16,10 @@ import {
 } from "@mui/material";
 import {redirect} from "@remix-run/node";
 import EventRepository from "~/repository/event.repository";
-import {CreateInvitationUi} from "~/data/invitation/create.invitation.ui";
+import {CreateInvitationUi, RepetitionFrequency} from "~/data/invitation/create.invitation.ui";
 import {getCurrentUserId} from "~/utils/session.util";
 import {City} from "~/data/user";
-
-const MAX_NUMBER_OF_EVENTS: number = 30;
+import {EventService} from "~/service/event.service";
 
 export async function loader({request}) {
    const userId: number = await getCurrentUserId(request);
@@ -39,6 +38,10 @@ export async function action({request}) {
    const formData = await request.formData();
    const date = formData.get("date")?.toString() || "";
    const time = formData.get("time")?.toString() || "";
+
+   const repeatFrequency: RepetitionFrequency = formData.get("repeatFrequency")?.toString() || RepetitionFrequency.NONE;
+   const repeatCount: number = parseInt(formData.get("repeatCount")?.toString() || "0", 10);
+
    const dateTime = `${date}T${time}`;
    const invitation: CreateInvitationDb = {
       name: formData.get("name")?.toString() || "",
@@ -46,14 +49,14 @@ export async function action({request}) {
       googleMapsLink: formData.get("googleMapsLink")?.toString() || "",
       city: formData.get("city")?.toString() || City.SOFIA,
       dateTime: new Date(dateTime),
-      repeatFrequency: formData.get("repeatFrequency")?.toString() || RepetitionFrequency.NONE,
-      repeatCount: parseInt(formData.get("repeatCount")?.toString() || "0", 10),
       duration: parseInt(formData.get("duration")?.toString() || "0", 10),
       numberOfPlayers: parseInt(formData.get("numberOfPlayers")?.toString() || "0", 10),
       description: formData.get("description")?.toString() || "",
       backgroundImageUrl: formData.get("backgroundImageUrl")?.toString() || "",
       private: false
    };
+
+   EventService.createRepetitiveEvents(invitation, repeatFrequency, repeatCount, userId);
 
    await EventRepository.createEvent(invitation, userId);
 
@@ -186,6 +189,7 @@ export default function CreateInvitationsPage() {
                   type="number"
                   label="Number of Occurrences"
                   name="repeatCount"
+                  inputProps={{ max: 10 }}
                   InputLabelProps={{ shrink: true }}
                   value={invitation.repeatCount}
                   onChange={handleChange}

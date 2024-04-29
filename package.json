@@ -29,7 +29,8 @@
     "react-dom": "^18.2.0",
     "remix": "^2.5.1",
     "source-map-support": "^0.5.21",
-    "ts-node": "^10.9.2"
+    "ts-node": "^10.9.2",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "@remix-run/dev": "^2.5.1",
