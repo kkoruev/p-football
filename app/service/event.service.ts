@@ -35,7 +35,7 @@ export class EventService {
             ...event,
             dateTime: nextDate,
             seriesId: seriesId,
-            createdBy: userId
+            userId: userId
          })
       }
       return eventData;
