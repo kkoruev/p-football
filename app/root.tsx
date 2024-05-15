@@ -1,7 +1,7 @@
 import {Links, LiveReload, Outlet, Scripts, useLoaderData} from '@remix-run/react'
 
 import theme from "~/utils/theme";
-import {ThemeProvider} from "@mui/material";
+import {Box, ThemeProvider} from "@mui/material";
 
 import globalCss from '~/styles/global.css';
 import {links as headerStyles} from '~/components/header/header'
@@ -41,23 +41,39 @@ export default function App() {
    return (
       <html lang="en">
       <head>
-         <meta charSet="utf-8" />
+         <meta charSet="utf-8"/>
          <meta
             name="viewport"
             content="width=device-width, initial-scale=1"
          />
          <title>SportsHub</title>
-         <Links />
-         <script dangerouslySetInnerHTML={{ __html: createFacebookSDKScript() }} />
+         <Links/>
+         <script dangerouslySetInnerHTML={{__html: createFacebookSDKScript()}}/>
       </head>
       <body>
       <ThemeProvider theme={theme}>
          <RootLayout isLoggedIn={data.isLoggedIn}>
-            <Outlet />
+            <Box
+               sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  minHeight: '100vh',
+                  width: '100%',
+                  backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.9)) ,url("/images/sports-hub-background.png")`,
+                  backgroundSize: {xs: 'auto 100%', sm: 'cover'},
+                  backgroundPosition: 'center',
+                  backgroundRepeat: 'no-repeat'
+               }}
+            >
+               <Outlet/>
+            </Box>
+
          </RootLayout>
       </ThemeProvider>
-      <Scripts />
-      <LiveReload />
+      <Scripts/>
+      <LiveReload/>
       </body>
       </html>
    );

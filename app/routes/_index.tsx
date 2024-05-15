@@ -50,7 +50,7 @@ export default function HomePage() {
 
    const handleLogin = () => {
       if (FB) {
-         FB.login(function(response) {
+         FB.login(function (response) {
             if (response.authResponse) {
                console.log('Welcome! Fetching your information.... ');
                FB.api('/me', {fields: 'name_format,short_name,name,email,picture'}, async function (response) {
@@ -66,32 +66,33 @@ export default function HomePage() {
    };
 
    return (
-      <Container maxWidth="sm">
-         <Box
+      <Container>
+          <Box
             sx={{
                display: 'flex',
                flexDirection: 'column',
                alignItems: 'center',
                justifyContent: 'center',
                minHeight: '100vh',
+               width: '100%',
+               backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.8)) ,url("/images/sports-hub-background.png")`,
+               backgroundSize: {xs: 'auto 100%', sm: 'cover'},
+               backgroundPosition: 'center',
+               backgroundRepeat: 'no-repeat'
             }}
          >
-            {!userName && <Typography variant="h4" component="h1" gutterBottom>
-               Welcome to Our Community
-            </Typography>}
+            <img src="/images/sport-hub-transparent-logo.png" alt="Logo" style={{maxWidth: '100%'}}/>
+
             {userName && <Typography variant="h6">Welcome, {userName}</Typography>} {/* Display the user's name */}
-            {!userName && <Typography variant="body1" paragraph>
-               Join us and let's play football together. Log in to create or join events!
-            </Typography>}
             {!userName && <Button
-               startIcon={<Facebook />}
+               startIcon={<Facebook/>}
                variant="contained"
                color="primary"
                onClick={handleLogin}
-               sx={{ textTransform: 'none' }}
+               sx={{textTransform: 'none'}}
             >
                Login with Facebook
-            </Button> }
+            </Button>}
          </Box>
       </Container>
    );

@@ -23,7 +23,7 @@ export default function EventOverview({invitation, imageUrl}: {
             bottom: 0,
             left: 0,
             width: '100%',
-            backgroundColor: 'rgba(0, 0, 0, 0.2)', // semi-transparent overlay for better text visibility
+            backgroundColor: 'rgba(0, 0, 0, 0.3)', // semi-transparent overlay for better text visibility
             color: 'white',
             padding: '20px',
             display: 'flex',
@@ -40,8 +40,8 @@ export default function EventOverview({invitation, imageUrl}: {
             </Box>
             <Box sx={{display: 'flex', gap: 2}}>
                <Button variant="contained" color="primary">Accept</Button>
-               <Button variant="contained" color="secondary">Maybe</Button>
-               <Button variant="contained" color="error">Reject</Button>
+               <Button sx={{opacity: 0.5 }} variant="contained" color="primary">Maybe</Button>
+               <Button variant="contained" color="secondary">Reject</Button>
             </Box>
          </Box>
       </Card>

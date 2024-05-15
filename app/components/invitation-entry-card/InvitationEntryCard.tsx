@@ -57,13 +57,13 @@ export default function InvitationEntryCard({invitation, actionResult}: {
                ) : (
                   <Form method="post">
                         <input type="hidden" name="invitationId" value={invitation.id}/>
-                        <Button sx={{ mx: 1 }} variant="outlined" disabled={isSubmitting} name="action" value="Accept" type="submit" size="small" startIcon={<ThumbUp/>}>
+                        <Button sx={{ mx: 1 }} variant="contained" disabled={isSubmitting} name="action" value="Accept" type="submit" size="small" startIcon={<ThumbUp/>}>
                            Accept
                         </Button>
                         <Button sx={{ mx: 1 }} variant="outlined" disabled={isSubmitting} name="action" value="Maybe" type="submit" size="small" startIcon={<EventAvailable/>}>
                            Maybe
                         </Button>
-                        <Button sx={{ mx: 1 }} variant="outlined" disabled={isSubmitting} name="action" value="Reject" type="submit" size="small" startIcon={<ThumbDown/>}>
+                        <Button sx={{ mx: 1 }} color="secondary" variant="contained" disabled={isSubmitting} name="action" value="Reject" type="submit" size="small" startIcon={<ThumbDown/>}>
                            Reject
                         </Button>
                   </Form>

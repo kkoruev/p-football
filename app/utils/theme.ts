@@ -1,13 +1,15 @@
 import {createTheme} from "@mui/material";
 
+// this is grey - #868686
+
 const theme = createTheme({
    palette: {
       mode: 'light',
       primary: {
-         main: '#007035'
+         main: '#00033a'
       },
       secondary: {
-         main: '#BDD0B8FF'
+         main: '#ff241f'
       },
       background: {
          default: '#f8f8f8',
