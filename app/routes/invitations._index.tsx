@@ -98,47 +98,27 @@ export default function InvitationsPage() {
    };
 
    return (
-      <Container sx={{bgcolor: 'background.default'}} className="invitations-container">
+      <Box className="invitation-card-container">
+         {!invitations.length && (
+            <Typography variant="body1">You have no upcoming invitations. Join a football event now!</Typography>
+         )}
 
-         <Box sx={{ display: 'flex', justifyContent: 'flex-end', p: 2, bgcolor: 'lightblue' }}>
-            <FormControl variant="outlined" sx={{ minWidth: 120, marginRight: 2 }}>
-               <InputLabel id="city-select-label">City</InputLabel>
-               <Select
-                  labelId="city-select-label"
-                  id="city-select"
-                  label="City"
-               >
-                  <MenuItem value="">
-                     <em>None</em>
-                  </MenuItem>
-                  <MenuItem value="New York">New York</MenuItem>
-                  <MenuItem value="Los Angeles">Los Angeles</MenuItem>
-                  <MenuItem value="Chicago">Chicago</MenuItem>
-               </Select>
-            </FormControl>
-         </Box>
-
-         <Box className="invitation-card-container">
-            {!invitations.length && (
-               <Typography variant="body1">You have no upcoming invitations. Join a football event now!</Typography>
-            )}
-
-            { invitations.length && (
-               invitations
-                  .map((invitation: EventInvitationDb) => fromInvitationDbToExpandedInvitation(invitation))
-                  .map((invitation: ExpandedInvitation) => (
+         {invitations.length && (
+            invitations
+               .map((invitation: EventInvitationDb) => fromInvitationDbToExpandedInvitation(invitation))
+               .map((invitation: ExpandedInvitation) => (
                   <InvitationEntryCard key={invitation.id} invitation={invitation}
-                                       isLoading="false" actionResult={invitation.id.toString() === invitationId ? actionResult : null}>
+                                       isLoading="false"
+                                       actionResult={invitation.id.toString() === invitationId ? actionResult : null}>
                   </InvitationEntryCard>
                ))
-            )}
-            {totalPages > 0 && (
-               <Box sx={{ display: 'flex', justifyContent: 'center', my: 2 }}>
-                  <Pagination count={totalPages} page={page} onChange={handlePageChange} />
-               </Box>
-            )}
-         </Box>
-      </Container>
+         )}
+         {totalPages > 0 && (
+            <Box sx={{display: 'flex', justifyContent: 'center', my: 2}}>
+               <Pagination count={totalPages} page={page} onChange={handlePageChange}/>
+            </Box>
+         )}
+      </Box>
    )
 }
 

@@ -53,23 +53,7 @@ export default function App() {
       <body>
       <ThemeProvider theme={theme}>
          <RootLayout isLoggedIn={data.isLoggedIn}>
-            <Box
-               sx={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  minHeight: '100vh',
-                  width: '100%',
-                  backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.9)) ,url("/images/sports-hub-background.png")`,
-                  backgroundSize: {xs: 'auto 100%', sm: 'cover'},
-                  backgroundPosition: 'center',
-                  backgroundRepeat: 'no-repeat'
-               }}
-            >
-               <Outlet/>
-            </Box>
-
+            <Outlet/>
          </RootLayout>
       </ThemeProvider>
       <Scripts/>

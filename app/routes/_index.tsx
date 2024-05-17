@@ -66,21 +66,7 @@ export default function HomePage() {
    };
 
    return (
-      <Container>
-          <Box
-            sx={{
-               display: 'flex',
-               flexDirection: 'column',
-               alignItems: 'center',
-               justifyContent: 'center',
-               minHeight: '100vh',
-               width: '100%',
-               backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.8)) ,url("/images/sports-hub-background.png")`,
-               backgroundSize: {xs: 'auto 100%', sm: 'cover'},
-               backgroundPosition: 'center',
-               backgroundRepeat: 'no-repeat'
-            }}
-         >
+          <Box sx={{ textAlign: 'center' }}>
             <img src="/images/sport-hub-transparent-logo.png" alt="Logo" style={{maxWidth: '100%'}}/>
 
             {userName && <Typography variant="h6">Welcome, {userName}</Typography>} {/* Display the user's name */}
@@ -94,6 +80,5 @@ export default function HomePage() {
                Login with Facebook
             </Button>}
          </Box>
-      </Container>
    );
 }

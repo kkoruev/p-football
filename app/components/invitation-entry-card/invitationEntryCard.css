@@ -2,9 +2,6 @@
     margin-bottom: 16px;
     max-width: 400px; /* Set a maximum width to control the card size */
     width: 100%; /* Ensure the card takes full width up to the maximum */
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
     border: 1px solid #ddd; /* Adds a subtle border for visual separation */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow for depth */
 }
