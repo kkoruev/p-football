@@ -226,33 +226,6 @@ export default function CreateInvitationsPage() {
                value={invitation.description}
                onChange={handleChange}
             />
-            <FormControl fullWidth margin="normal">
-               <InputLabel id="background-image-select-label">Background Image</InputLabel>
-               <Select
-                  labelId="background-image-select-label"
-                  id="backgroundImageUrl"
-                  name="backgroundImageUrl"
-                  value={invitation.backgroundImageUrl}
-                  label="Background Image"
-                  onChange={handleChange}
-               >
-                  {backgroundImageOptions.map((option) => (
-                     <MenuItem key={option.value} value={option.value}>
-                        {option.label}
-                     </MenuItem>
-                  ))}
-               </Select>
-            </FormControl>
-            <Grid container justifyContent="start" sx={{ my: 1 }}>
-               <Card>
-                  <CardMedia
-                     component="img"
-                     image={invitation.backgroundImageUrl}
-                     alt="Selected background"
-                     sx={{ width: 256, height: 144, objectFit: 'cover' }}
-                  />
-               </Card>
-            </Grid>
             <Button
                type="submit"
                fullWidth

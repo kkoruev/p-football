@@ -83,6 +83,7 @@ export default function GuestList({invitation, handleOpenModal}: {
          )}
          <CardActions>
             <Button onClick={handleOpenModal}>View All Guests</Button>
+            <Button onClick={handleOpenModal}>Invite (Change it)</Button>
          </CardActions>
       </Card>
    )
