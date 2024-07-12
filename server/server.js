@@ -41,8 +41,8 @@ const remixHandler =
 
 const __filename = url.fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const key = fs.readFileSync(path.resolve(__dirname, 'cert/localhost+2-key.pem'), 'utf8');
-const cert = fs.readFileSync(path.resolve(__dirname, 'cert/localhost+2.pem'), 'utf8');
+const key = fs.readFileSync(path.resolve(__dirname, 'cert/key.pem'), 'utf8');
+const cert = fs.readFileSync(path.resolve(__dirname, 'cert/cert.pem'), 'utf8');
 
 const app = express();
 
