@@ -16,9 +16,10 @@ import {
 import * as React from 'react';
 import {ExpandedInvitation} from "~/data/invitation/expanded.invitation";
 
-export default function GuestList({invitation, handleOpenModal}: {
+export default function GuestList({invitation, handleOpenModal, handleInviteFriendsModal}: {
    invitation: ExpandedInvitation,
-   handleOpenModal: () => void
+   handleOpenModal: () => void,
+   handleInviteFriendsModal: () => void,
 }) {
    const displayedGuests = invitation.participants?.slice(0, 5);
    const avatarImg = 'https://shorturl.at/iksOV';
@@ -83,7 +84,7 @@ export default function GuestList({invitation, handleOpenModal}: {
          )}
          <CardActions>
             <Button onClick={handleOpenModal}>View All Guests</Button>
-            <Button onClick={handleOpenModal}>Invite (Change it)</Button>
+            <Button onClick={handleInviteFriendsModal}>Invite (Change it)</Button>
          </CardActions>
       </Card>
    )

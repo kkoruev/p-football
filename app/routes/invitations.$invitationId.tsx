@@ -14,6 +14,7 @@ import GuestListExpanded from "~/components/event/GuestListExpanded";
 import {findById} from "~/database/inMemoryInvitations";
 import EventRepository from "~/repository/event.repository";
 import {fromInvitationDbToExpandedInvitation} from "~/utils/invitation.adapter.util";
+import InviteGuest from "~/components/event/InviteGuest";
 
 export async function loader({params}) {
    const {invitationId} = params;
@@ -29,8 +30,12 @@ export default function Invitation() {
    const invitation: ExpandedInvitation = useLoaderData<typeof loader>();
 
    const [modalOpen, setModalOpen] = useState(false);
+   const [isInviteModalOpen, setInviteModalOpen] = useState(false);
+
    const handleOpenModal = () => setModalOpen(true);
    const handleCloseModal = () => setModalOpen(false);
+   const handleOpenInviteModal = () => setInviteModalOpen(true);
+   const handleCloseInviteModal = () => setInviteModalOpen(false);
 
    return (
       <Container maxWidth="lg">
@@ -48,11 +53,12 @@ export default function Invitation() {
                </Grid>
                {/* Card 3: Participants List */}
                <Grid item xs={12} md={6}>
-                  <GuestList invitation={invitation} handleOpenModal={handleOpenModal}/>
+                  <GuestList invitation={invitation} handleOpenModal={handleOpenModal} handleInviteFriendsModal={handleOpenInviteModal}/>
                </Grid>
 
             </Grid>
             <GuestListExpanded invitation={invitation} modalOpen={modalOpen} handleCloseModal={handleCloseModal}/>
+            <InviteGuest open={isInviteModalOpen} handleClose={handleCloseInviteModal}/>
          </Box>
       </Container>
 
