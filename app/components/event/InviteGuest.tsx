@@ -24,9 +24,10 @@ export default function InviteGuest({ open, handleClose }) {
         { id: 3, name: 'Konstantin Kovachev', avatar: 'https://shorturl.at/iksOV' },
     ];
 
-    const filteredResults = searchQuery.length >= 2 
-    ? hardcodedResults.filter(user => user.name.toLowerCase().includes(searchQuery.toLowerCase()))
-    : [];
+    const filteredResults = searchQuery.length >= 2
+        ? hardcodedResults.filter(user => user.name.toLowerCase().includes(searchQuery.toLowerCase())
+            && !invitedUsers.some(invited => invited.id === user.id))
+        : [];
 
 
     return (
@@ -75,7 +76,7 @@ export default function InviteGuest({ open, handleClose }) {
                                     </ListItemAvatar>
                                     <ListItemText primary={user.name} />
                                     <Chip
-                                        label="Invitation Sent"
+                                        label=" Sent"
                                         color="success"
                                         icon={<CheckCircle />}
                                     />
@@ -88,7 +89,7 @@ export default function InviteGuest({ open, handleClose }) {
                                     </ListItemAvatar>
                                     <ListItemText primary={user.name} />
                                     <Chip
-                                        label="Invitation Added"
+                                        label="Added"
                                         color="primary"
                                         icon={<AddCircle />}
                                     />
