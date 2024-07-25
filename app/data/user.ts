@@ -9,6 +9,10 @@ export interface User {
    skillLevel: 'Beginner' | 'Intermediate' | 'Advanced' | 'Professional';
 }
 
+export interface DbUser extends User {
+   id: number
+}
+
 export const cities: string[] = ["Sofia", "Plovdiv", "Varna"];
 
 export enum City {

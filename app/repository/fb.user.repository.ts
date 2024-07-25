@@ -1,5 +1,6 @@
 import {FbProfile, User} from "~/data/user";
 import {prisma} from "~/utils/utils";
+import {User as PrismUser} from "@prisma/client";
 import {ValidationError} from "~/errors/validation.error";
 import {ErrorCode} from "~/errors/error.code";
 
@@ -13,6 +14,22 @@ export class FbUserRepository {
             }
          }}})
       } catch (error) {
+         this.handlePrismaClientError(error);
+         throw error;
+      }
+   }
+
+   static async searchUserByName(name: string): Promise<PrismUser[]>  {
+      try {
+         return await prisma.user.findMany({
+            where: {
+               name: {
+                  contains: name,
+                  mode: 'insensitive'
+               }
+            }
+         });
+      } catch(error) {
          this.handlePrismaClientError(error);
          throw error;
       }

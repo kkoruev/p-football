@@ -1,6 +1,7 @@
 import { AddCircle, CheckCircle } from "@mui/icons-material";
 import { Avatar, Box, Button, Chip, Dialog, DialogActions, DialogContent, DialogTitle, List, ListItem, ListItemAvatar, ListItemText, TextField, Typography } from "@mui/material";
 import { useState } from "react";
+import { User } from "~/data/user";
 
 
 export default function InviteGuest({ open, handleClose }) {
